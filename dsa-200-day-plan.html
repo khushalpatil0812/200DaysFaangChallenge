@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>200-Day DSA War Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #00ff88;
+    --accent2: #ff6b35;
+    --accent3: #7c6fff;
+    --accent4: #ffcc00;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --red: #ff4757;
+    --blue: #00b4ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BG */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index:1; }
+
+  /* HEADER */
+  header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+  .header-sub span { color: var(--accent2); }
+
+  .stats-bar {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* PHASE NAV */
+  .phase-nav {
+    display: flex;
+    gap: 8px;
+    padding: 28px 0;
+    flex-wrap: wrap;
+  }
+  .phase-btn {
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .phase-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .phase-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* PHASE HEADER */
+  .phase-header {
+    padding: 24px 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+  .phase-range {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .phase-goal {
+    font-size: 13px;
+    color: var(--text);
+    margin-top: 6px;
+    max-width: 600px;
+  }
+
+  /* WEEK GRID */
+  .weeks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .week-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .week-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .week-card:hover { border-color: var(--accent3); transform: translateY(-2px); }
+  .week-card:hover::before { opacity: 1; }
+
+  .week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .week-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  .week-topic {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+  .week-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .badge-easy { background: rgba(0,255,136,0.15); color: var(--accent); }
+  .badge-med { background: rgba(255,204,0,0.15); color: var(--accent4); }
+  .badge-hard { background: rgba(255,71,87,0.15); color: var(--red); }
+  .badge-sd { background: rgba(124,111,255,0.15); color: var(--accent3); }
+
+  .days-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .day-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--border);
+    font-size: 12px;
+    transition: border-color 0.15s;
+  }
+  .day-item:hover { border-left-color: var(--accent); }
+  .day-item.weekend { border-left-color: var(--accent3); background: rgba(124,111,255,0.05); }
+  .day-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 28px;
+    padding-top: 1px;
+  }
+  .day-content { color: var(--text); line-height: 1.4; flex: 1; }
+  .day-content strong { color: var(--accent2); }
+  .day-qs {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: auto;
+    padding-top: 1px;
+    white-space: nowrap;
+  }
+  .sd-tag {
+    display: inline-block;
+    background: rgba(124,111,255,0.2);
+    color: var(--accent3);
+    font-size: 9px;
+    padding: 1px 5px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* SYSTEM DESIGN SECTION */
+  .sd-section {
+    background: var(--card);
+    border: 1px solid var(--accent3);
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+  .sd-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: var(--accent3);
+    margin-bottom: 20px;
+  }
+  .sd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .sd-card {
+    background: rgba(124,111,255,0.05);
+    border: 1px solid rgba(124,111,255,0.2);
+    padding: 16px;
+  }
+  .sd-week { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+  .sd-topic { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .sd-items { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .sd-items li { font-size: 11px; color: var(--muted); padding-left: 12px; position: relative; }
+  .sd-items li::before { content: '→'; position: absolute; left: 0; color: var(--accent3); }
+
+  /* TIPS */
+  .tips-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 48px;
+  }
+  .tips-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    margin-bottom: 20px;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .tip-card {
+    padding: 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+  }
+  .tip-icon { font-size: 20px; margin-bottom: 8px; }
+  .tip-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .tip-text strong { color: var(--text); }
+
+  /* HIDDEN PHASES */
+  .phase-content { display: none; }
+  .phase-content.active { display: block; }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    height: 3px;
+    background: var(--border);
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transition: width 0.3s;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  footer span { color: var(--accent); }
+
+  @media(max-width:600px) {
+    .weeks-grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-tag">// DSA WAR PLAN · FAANG TARGET</div>
+    <h1>200-DAY<br>GRIND</h1>
+    <div class="header-sub">Mon–Fri: DSA problems &nbsp;|&nbsp; <span>Sat–Sun: System Design</span></div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num">200</div><div class="stat-label">Total Days</div></div>
+      <div class="stat"><div class="stat-num">600+</div><div class="stat-label">Problems</div></div>
+      <div class="stat"><div class="stat-num">50+</div><div class="stat-label">SD Topics</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Phases</div></div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <div class="phase-nav">
+    <button class="phase-btn active" onclick="showPhase(0)">PHASE 1 · D1–40</button>
+    <button class="phase-btn" onclick="showPhase(1)">PHASE 2 · D41–80</button>
+    <button class="phase-btn" onclick="showPhase(2)">PHASE 3 · D81–120</button>
+    <button class="phase-btn" onclick="showPhase(3)">PHASE 4 · D121–160</button>
+    <button class="phase-btn" onclick="showPhase(4)">PHASE 5 · D161–200</button>
+    <button class="phase-btn" onclick="showPhase(5)">SYS DESIGN</button>
+    <button class="phase-btn" onclick="showPhase(6)">PLAYBOOK</button>
+  </div>
+
+  <!-- =========== PHASE 1 =========== -->
+  <div class="phase-content active" id="phase-0">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:20%"></div></div>
+    <div class="phase-header">
+      <div>
+        <div class="phase-range">DAYS 1 – 40</div>
+        <div class="phase-title">FOUNDATION FORGE</div>
+        <div class="phase-goal">Arrays, Strings, Hashing, Two Pointers, Sliding Window — the bread &amp; butter of 60% of interviews. Master these cold.</div>
+      </div>
+      <div class="phase-range">40 days · ~160 problems</div>
+    </div>
+    <div class="weeks-grid">
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 01 · D1–5</div><div class="week-topic">ARRAYS BASICS</div></div>
+          <span class="week-badge badge-easy">EASY</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D1</span><div class="day-content"><strong>Two Sum, Best Time to Buy &amp; Sell Stock</strong> — HashMap fundamentals</div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D2</span><div class="day-content"><strong>Contains Duplicate, Product of Array Except Self</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D3</span><div class="day-content"><strong>Maximum Subarray (Kadane's), Move Zeroes</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D4</span><div class="day-content"><strong>Rotate Array, Find Disappeared Numbers</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D5</span><div class="day-content">Revise + <span class="sd-tag">SD</span> <strong>How does the Internet work? DNS, HTTP, TCP/IP</strong></div><span class="day-qs">rev</span></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 02 · D6–12</div><div class="week-topic">TWO POINTERS</div></div>
+          <span class="week-badge badge-easy">EASY–MED</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D6</span><div class="day-content"><strong>Valid Palindrome, Reverse String, Two Sum II</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D7</span><div class="day-content"><strong>3Sum, 3Sum Closest</strong> — sorting + pointers</div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D8</span><div class="day-content"><strong>Container with Most Water, Trapping Rain Water</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D9</span><div class="day-content"><strong>Remove Duplicates (sorted), Merge Sorted Array</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D10</span><div class="day-content"><strong>Sort Colors (Dutch Flag), 4Sum</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D11</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a URL Shortener (TinyURL)</strong> — hashing, DB, redirect</div></li>
+          <li class="day-item weekend"><span class="day-label">D12</span><div class="day-content"><span class="sd-tag">SD</span> URL Shortener deep dive: scale, cache layer, analytics</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 03 · D13–19</div><div class="week-topic">SLIDING WINDOW</div></div>
+          <span class="week-badge badge-med">MEDIUM</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D13</span><div class="day-content"><strong>Max Average Subarray, Max Sum Subarray of Size K</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D14</span><div class="day-content"><strong>Longest Substring Without Repeating Characters</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D15</span><div class="day-content"><strong>Minimum Window Substring, Permutation in String</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D16</span><div class="day-content"><strong>Fruit Into Baskets, Longest Repeating Char Replacement</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D17</span><div class="day-content"><strong>Sliding Window Maximum (Deque), Find All Anagrams</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D18–19</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Pastebin</strong> — object storage, expiry, CDN concepts</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 04 · D20–26</div><div class="week-topic">STRINGS + HASHING</div></div>
+          <span class="week-badge badge-med">MEDIUM</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D20</span><div class="day-content"><strong>Valid Anagram, Group Anagrams, Encode/Decode Strings</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D21</span><div class="day-content"><strong>Longest Palindromic Substring, Palindromic Substrings</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D22</span><div class="day-content"><strong>Longest Common Prefix, String Compression</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D23</span><div class="day-content"><strong>Roman to Integer, Integer to Roman, Zigzag Conversion</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D24</span><div class="day-content"><strong>Ransom Note, Word Pattern, Isomorphic Strings</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D25–26</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Rate Limiter</strong> — token bucket, sliding window counter</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 05 · D27–33</div><div class="week-topic">BINARY SEARCH</div></div>
+          <span class="week-badge badge-med">MEDIUM</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D27</span><div class="day-content"><strong>Binary Search, Search Insert Position, First/Last Position</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D28</span><div class="day-content"><strong>Search Rotated Sorted Array I &amp; II</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D29</span><div class="day-content"><strong>Find Minimum in Rotated Array, Koko Eating Bananas</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D30</span><div class="day-content"><strong>Median of Two Sorted Arrays, Sqrt(x)</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D31</span><div class="day-content"><strong>Capacity to Ship Packages, Split Array Largest Sum</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D32–33</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Twitter / Social Feed</strong> — fanout, timeline generation</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 06 · D34–40</div><div class="week-topic">PHASE 1 REVIEW</div></div>
+          <span class="week-badge badge-hard">MOCK</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D34</span><div class="day-content"><strong>Revisit weak topics</strong> — reattempt hardest problems from W1–5</div></li>
+          <li class="day-item"><span class="day-label">D35</span><div class="day-content"><strong>Timed mock: 4 problems in 90 min</strong> (Array + String mix)</div></li>
+          <li class="day-item"><span class="day-label">D36</span><div class="day-content"><strong>LeetCode contest simulation</strong> — 4 problems, hard timer</div></li>
+          <li class="day-item"><span class="day-label">D37</span><div class="day-content"><strong>Interview prep: Verbalize solutions out loud</strong></div></li>
+          <li class="day-item"><span class="day-label">D38</span><div class="day-content"><strong>Hard problems: Jump Game II, First Missing Positive</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D39–40</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design YouTube / Video Streaming</strong> — CDN, encoding, chunking</div></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========== PHASE 2 =========== -->
+  <div class="phase-content" id="phase-1">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:40%"></div></div>
+    <div class="phase-header">
+      <div>
+        <div class="phase-range">DAYS 41 – 80</div>
+        <div class="phase-title">TREE &amp; GRAPH DOMINATION</div>
+        <div class="phase-goal">Linked Lists, Stacks, Queues, Trees, BST, Graphs — the structure that separates average devs from FAANG engineers.</div>
+      </div>
+      <div class="phase-range">40 days · ~140 problems</div>
+    </div>
+    <div class="weeks-grid">
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 07 · D41–47</div><div class="week-topic">LINKED LISTS</div></div>
+          <span class="week-badge badge-med">MEDIUM</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D41</span><div class="day-content"><strong>Reverse Linked List, Merge Two Sorted Lists</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D42</span><div class="day-content"><strong>Linked List Cycle (Floyd's), Find Cycle Start</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D43</span><div class="day-content"><strong>Remove Nth Node From End, Reorder List</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D44</span><div class="day-content"><strong>LRU Cache (HashMap + DLL), Copy List with Random Pointer</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D45</span><div class="day-content"><strong>Merge K Sorted Lists, Reverse Nodes in K-Group</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D46–47</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Cache System (Memcached/Redis)</strong> — eviction, consistency</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 08 · D48–54</div><div class="week-topic">STACKS &amp; QUEUES</div></div>
+          <span class="week-badge badge-med">MEDIUM</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D48</span><div class="day-content"><strong>Valid Parentheses, Min Stack, Evaluate RPN</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D49</span><div class="day-content"><strong>Daily Temperatures, Next Greater Element I &amp; II</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D50</span><div class="day-content"><strong>Largest Rectangle in Histogram, Maximal Rectangle</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D51</span><div class="day-content"><strong>Implement Queue using Stacks, Design Circular Queue</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D52</span><div class="day-content"><strong>Asteroid Collision, Decode String, Simplify Path</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D53–54</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Message Queue (Kafka concepts)</strong> — producers, consumers, partitions</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 09–10 · D55–68</div><div class="week-topic">TREES (BFS + DFS)</div></div>
+          <span class="week-badge badge-med">MEDIUM</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D55</span><div class="day-content"><strong>Invert Binary Tree, Max Depth, Min Depth</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D56</span><div class="day-content"><strong>Level Order Traversal (BFS), Right Side View</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D57</span><div class="day-content"><strong>Diameter of Binary Tree, Balanced Binary Tree</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D58</span><div class="day-content"><strong>Same Tree, Subtree of Another Tree, Symmetric Tree</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D59</span><div class="day-content"><strong>Path Sum I &amp; II, Max Path Sum</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D60–61</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Google Drive / Dropbox</strong> — file chunking, sync, versioning</div></li>
+          <li class="day-item"><span class="day-label">D62</span><div class="day-content"><strong>Construct BT from Pre+In order, Serialize/Deserialize</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D63</span><div class="day-content"><strong>Lowest Common Ancestor, Count Good Nodes</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D64</span><div class="day-content"><strong>BST: Validate BST, Kth Smallest, Insert/Delete</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D65</span><div class="day-content"><strong>BST: Convert Sorted Array, Range Sum, Successor</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D67–68</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Notification System</strong> — push, email, fanout, reliability</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 11–12 · D69–80</div><div class="week-topic">GRAPHS</div></div>
+          <span class="week-badge badge-hard">HARD</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D69</span><div class="day-content"><strong>Number of Islands, Clone Graph, Flood Fill</strong> — DFS/BFS on grid</div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D70</span><div class="day-content"><strong>Course Schedule I &amp; II</strong> — Topological sort, cycle detect</div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D71</span><div class="day-content"><strong>Pacific Atlantic Water Flow, Max Area of Island</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D72</span><div class="day-content"><strong>Rotting Oranges, Walls and Gates</strong> — multi-source BFS</div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D73</span><div class="day-content"><strong>Word Ladder, Open the Lock</strong> — BFS shortest path</div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D74–75</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Uber / Ride Sharing</strong> — geohashing, matching, surge pricing</div></li>
+          <li class="day-item"><span class="day-label">D76</span><div class="day-content"><strong>Dijkstra: Network Delay, Cheapest Flights within K Stops</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D77</span><div class="day-content"><strong>Union Find: Redundant Connection, Number of Provinces</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D78</span><div class="day-content"><strong>Minimum Spanning Tree: Kruskal, Prim's concept</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D79–80</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design WhatsApp / Real-time Chat</strong> — WebSockets, message delivery, groups</div></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========== PHASE 3 =========== -->
+  <div class="phase-content" id="phase-2">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:60%"></div></div>
+    <div class="phase-header">
+      <div>
+        <div class="phase-range">DAYS 81 – 120</div>
+        <div class="phase-title">DP &amp; RECURSION MASTERY</div>
+        <div class="phase-goal">Dynamic Programming, Backtracking, Greedy — the topics that make or break your FAANG interview. This phase is the hardest.</div>
+      </div>
+      <div class="phase-range">40 days · ~120 problems</div>
+    </div>
+    <div class="weeks-grid">
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 13–14 · D81–94</div><div class="week-topic">DP FOUNDATIONS</div></div>
+          <span class="week-badge badge-hard">HARD</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D81</span><div class="day-content"><strong>Climbing Stairs, Fibonacci, House Robber I &amp; II</strong> — 1D DP</div><span class="day-qs">4Q</span></li>
+          <li class="day-item"><span class="day-label">D82</span><div class="day-content"><strong>Coin Change, Min Cost Climbing Stairs, Perfect Squares</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D83</span><div class="day-content"><strong>Longest Increasing Subsequence, Russian Doll Envelopes</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D84</span><div class="day-content"><strong>Word Break I &amp; II, Decode Ways</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D85</span><div class="day-content"><strong>Jump Game I &amp; II, Partition Equal Subset Sum</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D86–87</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Search Engine</strong> — crawling, indexing, PageRank basics</div></li>
+          <li class="day-item"><span class="day-label">D88</span><div class="day-content"><strong>0/1 Knapsack, Subset Sum</strong> — classic DP</div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D89</span><div class="day-content"><strong>LCS, Edit Distance, Longest Common Subsequence</strong> — 2D DP</div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D90</span><div class="day-content"><strong>Minimum Path Sum, Unique Paths I &amp; II</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D91</span><div class="day-content"><strong>Maximal Square, Dungeon Game</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D92–93</span><div class="day-content"><strong>Buy &amp; Sell with Cooldown, Best Time III &amp; IV</strong> — DP on states</div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D93–94</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Netflix</strong> — recommendation, CDN, adaptive streaming</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 15–16 · D95–108</div><div class="week-topic">BACKTRACKING</div></div>
+          <span class="week-badge badge-hard">HARD</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D95</span><div class="day-content"><strong>Subsets I &amp; II, Permutations I &amp; II</strong> — backtracking template</div><span class="day-qs">4Q</span></li>
+          <li class="day-item"><span class="day-label">D96</span><div class="day-content"><strong>Combinations, Combination Sum I &amp; II</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D97</span><div class="day-content"><strong>Word Search, N-Queens, Sudoku Solver</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D98</span><div class="day-content"><strong>Generate Parentheses, Letter Combinations Phone</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D99</span><div class="day-content"><strong>Palindrome Partitioning, Restore IP Addresses</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D100–101</span><div class="day-content"><span class="sd-tag">SD</span> <strong>DAY 100 SPECIAL: Mock Full SD Interview</strong> — pick any system, present end-to-end</div></li>
+          <li class="day-item"><span class="day-label">D102</span><div class="day-content"><strong>Greedy: Jump Game, Gas Station, Assign Cookies</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D103</span><div class="day-content"><strong>Task Scheduler, Reorganize String, Non-overlapping Intervals</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D104</span><div class="day-content"><strong>Interval Scheduling: Merge Intervals, Meeting Rooms II</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D105</span><div class="day-content"><strong>Greedy Hard: Candy, Minimum Cost to Connect Sticks</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D107–108</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design an E-commerce Platform</strong> — inventory, payments, orders, cart</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 17–18 · D109–120</div><div class="week-topic">HEAPS &amp; TRIES</div></div>
+          <span class="week-badge badge-hard">HARD</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D109</span><div class="day-content"><strong>Kth Largest Element, Top K Frequent Elements</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D110</span><div class="day-content"><strong>Find Median from Data Stream, K Closest Points</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D111</span><div class="day-content"><strong>Task Scheduler, Ugly Number II, Merge K Lists</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D112</span><div class="day-content"><strong>Implement Trie (insert, search, prefix), Word Search II</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D113</span><div class="day-content"><strong>Design Add/Search Words, Replace Words</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D114–115</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Typeahead/Autocomplete</strong> — Trie at scale, prefix index</div></li>
+          <li class="day-item"><span class="day-label">D116</span><div class="day-content"><strong>Segment Tree basics: Range Sum Query, Range Min</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D117</span><div class="day-content"><strong>Bit Manipulation: Single Number I/II, Counting Bits</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D118</span><div class="day-content"><strong>Bit: Reverse Bits, Missing Number, Sum of Two Integers</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D119–120</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Distributed ID Generator</strong> — Snowflake, UUID tradeoffs</div></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========== PHASE 4 =========== -->
+  <div class="phase-content" id="phase-3">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:80%"></div></div>
+    <div class="phase-header">
+      <div>
+        <div class="phase-range">DAYS 121 – 160</div>
+        <div class="phase-title">ADVANCED + MIXED DRILLS</div>
+        <div class="phase-goal">Hard problems, company-specific patterns, advanced graph algorithms. This is where you start thinking like a top 1% engineer.</div>
+      </div>
+      <div class="phase-range">40 days · ~120 problems</div>
+    </div>
+    <div class="weeks-grid">
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 19–20 · D121–134</div><div class="week-topic">HARD DP PATTERNS</div></div>
+          <span class="week-badge badge-hard">HARD</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D121</span><div class="day-content"><strong>Burst Balloons, Strange Printer</strong> — interval DP</div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D122</span><div class="day-content"><strong>Stone Game I/II/III, Predict Winner</strong> — game theory DP</div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D123</span><div class="day-content"><strong>Distinct Subsequences, Interleaving String</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D124</span><div class="day-content"><strong>Regular Expression Matching, Wildcard Matching</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D125</span><div class="day-content"><strong>Minimum Window + Hard Sliding Window combos</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D126–127</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Distributed Database</strong> — sharding, replication, CAP theorem</div></li>
+          <li class="day-item"><span class="day-label">D128</span><div class="day-content"><strong>Advanced Graphs: Bellman-Ford, Floyd-Warshall</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D129</span><div class="day-content"><strong>Tarjan's SCC, Bridges &amp; Articulation Points</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D130</span><div class="day-content"><strong>Alien Dictionary, Sequence Reconstruction</strong></div><span class="day-qs">2Q</span></li>
+          <li class="day-item"><span class="day-label">D131</span><div class="day-content"><strong>LFU Cache, Design HashMap, Design HashSet</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D133–134</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Payment System (Stripe-like)</strong> — idempotency, ledger, fraud detection</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 21–22 · D135–148</div><div class="week-topic">COMPANY PATTERNS</div></div>
+          <span class="week-badge badge-hard">TARGETED</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D135–136</span><div class="day-content"><strong>Google Patterns: Skyline Problem, Meeting Rooms, Calendar</strong></div><span class="day-qs">4Q</span></li>
+          <li class="day-item"><span class="day-label">D137–138</span><div class="day-content"><strong>Amazon Patterns: Top K, Warehouse design, Inventory</strong></div><span class="day-qs">4Q</span></li>
+          <li class="day-item"><span class="day-label">D139–140</span><div class="day-content"><strong>Meta Patterns: Social graph, Timeline, Friend Suggestions</strong></div><span class="day-qs">4Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D140–141</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Instagram / Photo Sharing</strong> — media storage, feed generation, CDN</div></li>
+          <li class="day-item"><span class="day-label">D142</span><div class="day-content"><strong>Microsoft Patterns: Excel sheet column, Word puzzle</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D143</span><div class="day-content"><strong>Matrix: Set Matrix Zeroes, Rotate Image, Spiral Matrix</strong></div><span class="day-qs">3Q</span></li>
+          <li class="day-item"><span class="day-label">D144</span><div class="day-content"><strong>Math: Pow(x,n), Reverse Integer, Happy Number, Excel Col</strong></div><span class="day-qs">4Q</span></li>
+          <li class="day-item weekend"><span class="day-label">D147–148</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Logging &amp; Monitoring System</strong> — aggregation, alerting, dashboards</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 23–24 · D149–160</div><div class="week-topic">MOCK INTERVIEWS</div></div>
+          <span class="week-badge badge-hard">MOCK</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D149–150</span><div class="day-content"><strong>Full Mock #1:</strong> 2 LC mediums + 1 hard (90 min timed)</div></li>
+          <li class="day-item"><span class="day-label">D151–152</span><div class="day-content"><strong>Full Mock #2:</strong> Blind 75 hardest — timed, no hints</div></li>
+          <li class="day-item"><span class="day-label">D153</span><div class="day-content">Review mistakes, rewrite optimal solutions from memory</div></li>
+          <li class="day-item"><span class="day-label">D154</span><div class="day-content"><strong>Full Mock #3:</strong> Google-style OA simulation</div></li>
+          <li class="day-item weekend"><span class="day-label">D155–156</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design an API Gateway</strong> — auth, throttling, routing, logging</div></li>
+          <li class="day-item"><span class="day-label">D157</span><div class="day-content"><strong>Verbalize solutions</strong> — record yourself, watch it back</div></li>
+          <li class="day-item"><span class="day-label">D158</span><div class="day-content"><strong>Behavioral + DSA combo mock</strong> (STAR method + code)</div></li>
+          <li class="day-item weekend"><span class="day-label">D159–160</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Zoom / Video Conferencing</strong> — WebRTC, SFU/MCU, signaling</div></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========== PHASE 5 =========== -->
+  <div class="phase-content" id="phase-4">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+    <div class="phase-header">
+      <div>
+        <div class="phase-range">DAYS 161 – 200</div>
+        <div class="phase-title">FINAL ASSAULT</div>
+        <div class="phase-goal">Full mock interviews, weak area annihilation, company-specific prep, and mental peak performance. You're ready — now sharpen the blade.</div>
+      </div>
+      <div class="phase-range">40 days · ~100 problems</div>
+    </div>
+    <div class="weeks-grid">
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 25–26 · D161–174</div><div class="week-topic">WEAK AREA BLITZ</div></div>
+          <span class="week-badge badge-hard">TARGETED</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D161–165</span><div class="day-content">Go back to your 3 weakest topics — do 5 problems each day on those ONLY</div><span class="day-qs">5Q/day</span></li>
+          <li class="day-item"><span class="day-label">D166</span><div class="day-content"><strong>Contest: solve any 2 LeetCode Weekly problems</strong></div></li>
+          <li class="day-item weekend"><span class="day-label">D167–168</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Stock Exchange</strong> — order matching, trade engine, latency</div></li>
+          <li class="day-item"><span class="day-label">D169–172</span><div class="day-content"><strong>Blind 75 speed run:</strong> all 75, timed. Aim for &lt;20min per problem</div></li>
+          <li class="day-item weekend"><span class="day-label">D173–174</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Google Maps</strong> — routing, geospatial indexing, ETA prediction</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 27–28 · D175–188</div><div class="week-topic">INTERVIEW SIMULATION</div></div>
+          <span class="week-badge badge-hard">FINALS</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D175–176</span><div class="day-content"><strong>Full interview day sim:</strong> DSA round + SD round + behavioral back to back</div></li>
+          <li class="day-item"><span class="day-label">D177</span><div class="day-content">Review + rest. No grinding. Read solutions philosophically.</div></li>
+          <li class="day-item"><span class="day-label">D178–180</span><div class="day-content"><strong>NeetCode 150 gap check:</strong> any unsolved — finish them now</div></li>
+          <li class="day-item weekend"><span class="day-label">D181–182</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design Airbnb</strong> — search, bookings, availability, pricing</div></li>
+          <li class="day-item"><span class="day-label">D183–186</span><div class="day-content"><strong>Pramp / InterviewBit mock sessions</strong> — real human mock interviews</div></li>
+          <li class="day-item weekend"><span class="day-label">D187–188</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Design a Real-time Leaderboard</strong> — Redis sorted sets, pub/sub</div></li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-header">
+          <div><div class="week-num">WEEK 29–30 · D189–200</div><div class="week-topic">THE FINAL 12</div></div>
+          <span class="week-badge badge-hard">⚡ GO TIME</span>
+        </div>
+        <ul class="days-list">
+          <li class="day-item"><span class="day-label">D189</span><div class="day-content"><strong>ONLY review your personal notes.</strong> No new problems.</div></li>
+          <li class="day-item"><span class="day-label">D190–192</span><div class="day-content">3 hard LCs per day — companies you're targeting specifically</div><span class="day-qs">3Q/day</span></li>
+          <li class="day-item weekend"><span class="day-label">D193–194</span><div class="day-content"><span class="sd-tag">SD</span> <strong>Final SD Review:</strong> draw 5 systems from memory, no notes</div></li>
+          <li class="day-item"><span class="day-label">D195–197</span><div class="day-content"><strong>Active recall sprint:</strong> template solutions for top 10 patterns from memory</div></li>
+          <li class="day-item"><span class="day-label">D198</span><div class="day-content">Sleep 8 hours. Eat well. Light walk. Read your achievements.</div></li>
+          <li class="day-item"><span class="day-label">D199</span><div class="day-content"><strong>Final mock:</strong> 1 problem, 45 min, think out loud as if interviewer is there</div></li>
+          <li class="day-item"><span class="day-label">D200</span><div class="day-content">🏆 <strong>YOU'RE READY. APPLY. CRUSH IT.</strong></div></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========== SYSTEM DESIGN DEEP DIVE =========== -->
+  <div class="phase-content" id="phase-5">
+    <div class="phase-header" style="border-left-color: var(--accent3);">
+      <div>
+        <div class="phase-range">EVERY WEEKEND · 50+ TOPICS</div>
+        <div class="phase-title" style="color:var(--accent3)">SYSTEM DESIGN CURRICULUM</div>
+        <div class="phase-goal">Complete weekend-by-weekend system design roadmap. Sat = design, Sun = deep dive + scalability discussion.</div>
+      </div>
+    </div>
+    <div class="sd-section">
+      <div class="sd-title">FOUNDATIONS (WEEKS 1–10)</div>
+      <div class="sd-grid">
+        <div class="sd-card">
+          <div class="sd-week">WK 1 · D5</div>
+          <div class="sd-topic">Internet Fundamentals</div>
+          <ul class="sd-items"><li>DNS resolution, A/CNAME records</li><li>TCP vs UDP, 3-way handshake</li><li>HTTP/1.1 vs HTTP/2 vs HTTP/3</li><li>TLS/SSL handshake</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 2 · D11–12</div>
+          <div class="sd-topic">URL Shortener (TinyURL)</div>
+          <ul class="sd-items"><li>Base62 encoding hash</li><li>DB schema: short → long</li><li>301 vs 302 redirect</li><li>Analytics counter, cache hit</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 3 · D18–19</div>
+          <div class="sd-topic">Pastebin</div>
+          <ul class="sd-items"><li>Object storage (S3) vs DB</li><li>TTL-based expiry</li><li>CDN for read-heavy content</li><li>Paste deduplication</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 4 · D25–26</div>
+          <div class="sd-topic">Rate Limiter</div>
+          <ul class="sd-items"><li>Token Bucket algorithm</li><li>Leaky Bucket, Sliding Window</li><li>Redis counter with TTL</li><li>Distributed rate limiting</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 5 · D32–33</div>
+          <div class="sd-topic">Twitter / Social Feed</div>
+          <ul class="sd-items"><li>Fanout on write vs on read</li><li>Celebrity problem (hybrid)</li><li>Timeline cache (Redis list)</li><li>Eventual consistency</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 6 · D39–40</div>
+          <div class="sd-topic">YouTube</div>
+          <ul class="sd-items"><li>Video chunking + encoding</li><li>HLS adaptive bitrate</li><li>CDN edge caching</li><li>View count: approx counting</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 7 · D46–47</div>
+          <div class="sd-topic">Cache System (Redis)</div>
+          <ul class="sd-items"><li>LRU, LFU, TTL eviction</li><li>Cache aside, write-through</li><li>Cache stampede prevention</li><li>Redis cluster, sentinel</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 8 · D53–54</div>
+          <div class="sd-topic">Message Queue (Kafka)</div>
+          <ul class="sd-items"><li>Producer → broker → consumer</li><li>Partitions &amp; offsets</li><li>At-least-once delivery</li><li>Dead letter queues</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 9 · D60–61</div>
+          <div class="sd-topic">Google Drive</div>
+          <ul class="sd-items"><li>File chunking (4MB blocks)</li><li>Dedup via content hash</li><li>Sync conflict resolution</li><li>Versioning + delta sync</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 10 · D67–68</div>
+          <div class="sd-topic">Notification System</div>
+          <ul class="sd-items"><li>FCM / APNs push delivery</li><li>Email via SES/Sendgrid</li><li>Fanout workers, queues</li><li>Retry, idempotency</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="sd-section">
+      <div class="sd-title">INTERMEDIATE (WEEKS 11–20)</div>
+      <div class="sd-grid">
+        <div class="sd-card">
+          <div class="sd-week">WK 11 · D74–75</div>
+          <div class="sd-topic">Uber / Ride Sharing</div>
+          <ul class="sd-items"><li>Geohashing for proximity</li><li>Driver matching algorithm</li><li>Surge pricing model</li><li>Trip state machine</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 12 · D79–80</div>
+          <div class="sd-topic">WhatsApp / Chat</div>
+          <ul class="sd-items"><li>WebSocket vs long polling</li><li>Message delivery receipts</li><li>Group messaging fanout</li><li>E2E encryption flow</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 13 · D86–87</div>
+          <div class="sd-topic">Search Engine</div>
+          <ul class="sd-items"><li>Web crawler architecture</li><li>Inverted index building</li><li>TF-IDF ranking basics</li><li>PageRank simplified</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 14 · D93–94</div>
+          <div class="sd-topic">Netflix</div>
+          <ul class="sd-items"><li>Personalization engine</li><li>Multi-CDN strategy</li><li>ABR streaming</li><li>A/B testing infrastructure</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 15 · D100–101</div>
+          <div class="sd-topic">Full Mock Interview</div>
+          <ul class="sd-items"><li>Pick any system end-to-end</li><li>45 min timed presentation</li><li>Capacity estimation drill</li><li>Tradeoff discussion</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 16 · D107–108</div>
+          <div class="sd-topic">E-commerce Platform</div>
+          <ul class="sd-items"><li>Inventory management</li><li>Cart + checkout flow</li><li>Payment gateway integration</li><li>Order state machine</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 17 · D114–115</div>
+          <div class="sd-topic">Typeahead / Autocomplete</div>
+          <ul class="sd-items"><li>Trie at scale (distributed)</li><li>Prefix index in Redis</li><li>Top-K with frequency</li><li>Personalized suggestions</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 18 · D119–120</div>
+          <div class="sd-topic">Distributed ID Generator</div>
+          <ul class="sd-items"><li>UUID v4 tradeoffs</li><li>Twitter Snowflake breakdown</li><li>Ticket server approach</li><li>Clock skew handling</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 19 · D126–127</div>
+          <div class="sd-topic">Distributed Database</div>
+          <ul class="sd-items"><li>Horizontal sharding strategies</li><li>Master-slave replication</li><li>CAP theorem in practice</li><li>Consistent hashing</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WK 20 · D133–134</div>
+          <div class="sd-topic">Payment System</div>
+          <ul class="sd-items"><li>Idempotency keys</li><li>Double-entry ledger</li><li>Saga pattern for distributed tx</li><li>Fraud scoring pipeline</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="sd-section">
+      <div class="sd-title">ADVANCED (WEEKS 21–30)</div>
+      <div class="sd-grid">
+        <div class="sd-card"><div class="sd-week">WK 21</div><div class="sd-topic">Instagram</div><ul class="sd-items"><li>Media upload pipeline</li><li>Feed ranking ML signals</li><li>Stories expiry logic</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 22</div><div class="sd-topic">Logging &amp; Monitoring</div><ul class="sd-items"><li>Log aggregation (ELK)</li><li>Metrics collection (Prometheus)</li><li>Alerting rules, dashboards</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 23</div><div class="sd-topic">API Gateway</div><ul class="sd-items"><li>Auth: JWT, OAuth2</li><li>Throttling + circuit breaker</li><li>Request routing, transforms</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 24</div><div class="sd-topic">Zoom / Video Call</div><ul class="sd-items"><li>WebRTC P2P vs SFU</li><li>TURN/STUN signaling</li><li>Video encoding tradeoffs</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 25</div><div class="sd-topic">Stock Exchange</div><ul class="sd-items"><li>Order book matching engine</li><li>Market vs limit orders</li><li>Low-latency architecture</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 26</div><div class="sd-topic">Google Maps</div><ul class="sd-items"><li>Quadtree / R-tree indexing</li><li>A* / Dijkstra routing</li><li>ETA prediction model</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 27</div><div class="sd-topic">Airbnb</div><ul class="sd-items"><li>Availability calendar</li><li>Search with geo + filters</li><li>Dynamic pricing</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 28</div><div class="sd-topic">Real-time Leaderboard</div><ul class="sd-items"><li>Redis ZADD sorted sets</li><li>Pub/Sub for live updates</li><li>Sharding for global scale</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 29</div><div class="sd-topic">SD Review Sprint</div><ul class="sd-items"><li>Draw 5 systems from memory</li><li>Capacity estimation drills</li><li>Tradeoff flash cards</li></ul></div>
+        <div class="sd-card"><div class="sd-week">WK 30</div><div class="sd-topic">Full SD Mock ×2</div><ul class="sd-items"><li>45 min each, timed</li><li>Whiteboard style</li><li>Self-evaluate with rubric</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========== PLAYBOOK =========== -->
+  <div class="phase-content" id="phase-6">
+    <div class="phase-header" style="border-left-color: var(--accent2);">
+      <div>
+        <div class="phase-title" style="color:var(--accent2)">THE PRO PLAYBOOK</div>
+        <div class="phase-goal">How to use this plan like an engineer, not a student. The habits that separate crackers from followers.</div>
+      </div>
+    </div>
+    <div class="tips-section">
+      <div class="tips-title">⚡ EXECUTION RULES</div>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">🧠</div>
+          <div class="tip-text"><strong>Always attempt first.</strong> No solution for 30 min minimum. Pain = learning. Google is a last resort. Your brain rewires when it struggles.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🗣️</div>
+          <div class="tip-text"><strong>Talk out loud.</strong> Every problem — narrate your thought process. "I'm thinking of using a hashmap because..." Silence in interviews kills.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">📝</div>
+          <div class="tip-text"><strong>Maintain an error log.</strong> Every wrong solution goes in a Notion doc. Pattern: mistake → root cause → correct approach → key insight.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">⏱️</div>
+          <div class="tip-text"><strong>Time yourself.</strong> Easy = 15 min. Medium = 25 min. Hard = 40 min. If you're stuck past that, look at the approach hint, not the solution.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🔁</div>
+          <div class="tip-text"><strong>Spaced repetition.</strong> Week 1 problems → review in Week 3. Week 3 → review in Week 6. Use Anki cards for patterns, not solutions.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">💪</div>
+          <div class="tip-text"><strong>Quality &gt; quantity.</strong> 3 problems deeply understood beats 10 solutions copy-pasted. Know WHY your complexity is O(n log n) not just that it is.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">📐</div>
+          <div class="tip-text"><strong>Master templates.</strong> Sliding window, BFS/DFS, backtracking, DP state transition, two-pointer — know them cold. Derive, don't memorize answers.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🏗️</div>
+          <div class="tip-text"><strong>SD framework URFCDE:</strong> Understand → Requirements → Frontend/API → Capacity → Data model → Execution. Use it every single SD session.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🎯</div>
+          <div class="tip-text"><strong>Resources:</strong> NeetCode 150, Blind 75, Grokking SD interview, ByteByteGo, AlgoExpert (optional), Pramp for mocks.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tips-section">
+      <div class="tips-title">📊 WEEKLY SCHEDULE</div>
+      <div class="sd-grid">
+        <div class="sd-card">
+          <div class="sd-week">MONDAY</div>
+          <div class="sd-topic">New Topic Day</div>
+          <ul class="sd-items"><li>Learn the pattern/concept</li><li>Watch NeetCode video</li><li>Solve 2-3 easy warm-ups</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">TUESDAY</div>
+          <div class="sd-topic">Medium Grind</div>
+          <ul class="sd-items"><li>3 mediums on the topic</li><li>30 min each max</li><li>Document patterns</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">WEDNESDAY</div>
+          <div class="sd-topic">Hard + Spaced Review</div>
+          <ul class="sd-items"><li>1 hard problem (40 min)</li><li>Review 3 old problems cold</li><li>Complexity analysis drill</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">THURSDAY</div>
+          <div class="sd-topic">Timed Mock</div>
+          <ul class="sd-items"><li>2 problems in 60 min</li><li>Talk out loud</li><li>Interview simulation</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">FRIDAY</div>
+          <div class="sd-topic">Mixed + Revision</div>
+          <ul class="sd-items"><li>Mix of previous weeks</li><li>Revisit error log</li><li>Update Anki cards</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">SATURDAY</div>
+          <div class="sd-topic">System Design (DESIGN)</div>
+          <ul class="sd-items"><li>45 min: design from scratch</li><li>Draw on paper first</li><li>No notes, test recall</li></ul>
+        </div>
+        <div class="sd-card">
+          <div class="sd-week">SUNDAY</div>
+          <div class="sd-topic">System Design (DEEP DIVE)</div>
+          <ul class="sd-items"><li>Watch ByteByteGo on topic</li><li>Fill gaps from your design</li><li>Write 1-page summary</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="tips-section">
+      <div class="tips-title">🔥 MUST-KNOW PROBLEM PATTERNS</div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="tip-icon">1️⃣</div><div class="tip-text"><strong>Sliding Window</strong> — any subarray/substring optimization</div></div>
+        <div class="tip-card"><div class="tip-icon">2️⃣</div><div class="tip-text"><strong>Two Pointers</strong> — sorted array, palindrome, partitioning</div></div>
+        <div class="tip-card"><div class="tip-icon">3️⃣</div><div class="tip-text"><strong>Fast/Slow Pointers</strong> — cycle detection, middle of list</div></div>
+        <div class="tip-card"><div class="tip-icon">4️⃣</div><div class="tip-text"><strong>Merge Intervals</strong> — overlap problems, scheduling</div></div>
+        <div class="tip-card"><div class="tip-icon">5️⃣</div><div class="tip-text"><strong>Cyclic Sort</strong> — find missing/duplicate in 1–N range</div></div>
+        <div class="tip-card"><div class="tip-icon">6️⃣</div><div class="tip-text"><strong>In-place Reversal LL</strong> — reverse subnodes without extra space</div></div>
+        <div class="tip-card"><div class="tip-icon">7️⃣</div><div class="tip-text"><strong>BFS / Tree Level Order</strong> — any level-by-level tree/graph traversal</div></div>
+        <div class="tip-card"><div class="tip-icon">8️⃣</div><div class="tip-text"><strong>DFS Tree Path</strong> — root-to-leaf, path sum, diameter</div></div>
+        <div class="tip-card"><div class="tip-icon">9️⃣</div><div class="tip-text"><strong>Two Heaps</strong> — median, balanced partitions</div></div>
+        <div class="tip-card"><div class="tip-icon">🔟</div><div class="tip-text"><strong>Subsets / Backtracking</strong> — combinations, permutations, decision trees</div></div>
+        <div class="tip-card"><div class="tip-icon">1️⃣1️⃣</div><div class="tip-text"><strong>Modified Binary Search</strong> — search on answer, rotated arrays</div></div>
+        <div class="tip-card"><div class="tip-icon">1️⃣2️⃣</div><div class="tip-text"><strong>Top K Elements</strong> — heap + frequency map combo</div></div>
+        <div class="tip-card"><div class="tip-icon">1️⃣3️⃣</div><div class="tip-text"><strong>K-way Merge</strong> — merge K sorted lists/arrays</div></div>
+        <div class="tip-card"><div class="tip-icon">1️⃣4️⃣</div><div class="tip-text"><strong>Topological Sort</strong> — any ordering with dependencies</div></div>
+        <div class="tip-card"><div class="tip-icon">1️⃣5️⃣</div><div class="tip-text"><strong>DP — 1D/2D state</strong> — optimal substructure + overlapping subproblems</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span>200-DAY WAR PLAN</span> · BUILT TO CRACK AANG-LEVEL COMPANIES · YOU'VE GOT THIS 🔥
+  </div>
+</footer>
+
+<script>
+  function showPhase(idx) {
+    document.querySelectorAll('.phase-content').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.phase-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
