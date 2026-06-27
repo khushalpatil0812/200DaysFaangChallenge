@@ -1,0 +1,21 @@
+class Graph {
+
+    private int vertices;
+    private int[][] adjMatrix;
+
+    Graph(int vertices) {
+        this.vertices = vertices;
+        adjMatrix = new int[vertices][vertices];
+    }
+
+    // Undirected Edge
+    void addEdge(int u, int v) {
+        adjMatrix[u][v] = 1;
+        adjMatrix[v][u] = 1;
+    }
+
+    // Directed Edge
+    void addDirectedEdge(int u, int v) {
+        adjMatrix[u][v] = 1;
+    }
+}
