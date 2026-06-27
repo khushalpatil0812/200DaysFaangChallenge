@@ -1,0 +1,28 @@
+import java.util.*;
+
+class Graph {
+
+    private int vertices;
+    private ArrayList<ArrayList<Integer>> adjList;
+
+    Graph(int vertices) {
+        this.vertices = vertices;
+
+        adjList = new ArrayList<>();
+
+        for (int i = 0; i < vertices; i++) {
+            adjList.add(new ArrayList<>());
+        }
+    }
+
+    // Undirected Edge
+    void addEdge(int u, int v) {
+        adjList.get(u).add(v);
+        adjList.get(v).add(u);
+    }
+
+    // Directed Edge
+    void addDirectedEdge(int u, int v) {
+        adjList.get(u).add(v);
+    }
+}
