@@ -1,0 +1,26 @@
+// DFS (Recursive)
+
+void dfsRecursive(int vertex, boolean[] visited) {
+
+    visited[vertex] = true;
+    System.out.print(vertex + " ");
+
+    for (int neighbor : adjList.get(vertex)) {
+
+        if (!visited[neighbor]) {
+            dfsRecursive(neighbor, visited);
+        }
+    }
+}
+
+void dfs() {
+
+    boolean[] visited = new boolean[vertices];
+
+    for (int i = 0; i < vertices; i++) {
+
+        if (!visited[i]) {
+            dfsRecursive(i, visited);
+        }
+    }
+}
