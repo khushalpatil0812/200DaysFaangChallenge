@@ -1,0 +1,219 @@
+Here's a concise explanation of each question and the reasoning behind the approach.
+
+---
+
+# 133. Clone Graph (Medium)
+
+### Question
+
+You are given a node from a **connected undirected graph**. Every node contains:
+
+* A value
+* A list of its neighbors
+
+Your task is to create a **deep copy** (clone) of the entire graph and return the cloned starting node.
+
+A **deep copy** means creating entirely new nodes with the same connections, without reusing any original nodes.
+
+### Approach (DFS/BFS + HashMap)
+
+* Traverse the graph using **DFS** (or BFS).
+* For each original node:
+
+  * If it has already been cloned, return the cloned node from the `HashMap`.
+  * Otherwise:
+
+    * Create a new node.
+    * Store the mapping `original → clone` in the `HashMap`.
+    * Recursively clone all neighbors and connect them to the cloned node.
+* The `HashMap` prevents:
+
+  * Cloning the same node multiple times.
+  * Infinite recursion due to cycles.
+
+**Time Complexity:** `O(V + E)`
+**Space Complexity:** `O(V)`
+
+---
+
+# 997. Find the Town Judge (Easy)
+
+### Question
+
+There are `n` people in a town.
+
+The town judge must satisfy:
+
+* Trusts nobody.
+* Is trusted by every other person.
+* Only one person can satisfy these conditions.
+
+Return the judge's label, or `-1` if no judge exists.
+
+### Approach (In-degree / Out-degree using a Score Array)
+
+Instead of building a graph and traversing it:
+
+* Maintain one `score[]` array.
+* For every trust relationship `[a, b]`:
+
+  * Decrease `score[a]` because `a` trusts someone.
+  * Increase `score[b]` because `b` is trusted.
+* After processing all relationships:
+
+  * The judge will have `score = n - 1`.
+
+This works because:
+
+* The judge never loses points (trusts no one).
+* The judge gains one point from every other person.
+
+**Time Complexity:** `O(n + trust.length)`
+**Space Complexity:** `O(n)`
+
+---
+
+# Graph Representation
+
+### Question
+
+Represent a graph so that it can be processed efficiently.
+
+### Common Representations
+
+#### 1. Adjacency List
+
+Each node stores a list of its neighbors.
+
+Example:
+
+```text
+0 → [1,2]
+1 → [2]
+2 → [0]
+```
+
+Best for sparse graphs.
+
+* Space: `O(V + E)`
+
+---
+
+#### 2. Adjacency Matrix
+
+A 2D matrix where:
+
+```text
+matrix[i][j] = 1
+```
+
+means an edge exists between `i` and `j`.
+
+Example:
+
+```text
+    0 1 2
+0 [ 0 1 1 ]
+1 [ 0 0 1 ]
+2 [ 1 0 0 ]
+```
+
+Best when checking whether an edge exists quickly.
+
+* Space: `O(V²)`
+
+---
+
+# 1791. Find Center of Star Graph (Easy)
+
+### Question
+
+A star graph contains:
+
+* One center node.
+* Every other node is connected directly to the center.
+
+Return the center node.
+
+### Approach 1 (Degree Counting)
+
+Count the degree of every node.
+
+The center will have:
+
+```text
+degree = n - 1
+```
+
+because it is connected to every other node.
+
+**Time Complexity:** `O(n)`
+
+---
+
+### Approach 2 (Observation - Optimal)
+
+In a valid star graph:
+
+* Every edge contains the center.
+* Therefore, the common node in the **first two edges** is always the center.
+
+Example:
+
+```text
+[1,2]
+[2,3]
+```
+
+Common node = `2`
+
+No graph traversal is required.
+
+**Time Complexity:** `O(1)`
+
+---
+
+# 797. All Paths From Source to Target (Medium)
+
+### Question
+
+You are given a **Directed Acyclic Graph (DAG)**.
+
+Return **all possible paths** from node `0` to node `n - 1`.
+
+### Approach (DFS + Backtracking)
+
+* Start DFS from node `0`.
+* Maintain a list representing the current path.
+* Add the current node to the path.
+* If the target node is reached:
+
+  * Save a copy of the current path.
+* Otherwise:
+
+  * Recursively visit every neighbor.
+* After exploring a neighbor, remove the current node from the path (backtracking) to explore other paths.
+
+Since the graph is a **DAG**, there are no cycles, so a `visited[]` array is not required.
+
+**Time Complexity:** Depends on the number of possible paths (can be exponential in the worst case).
+**Space Complexity:** `O(path length)` for recursion, excluding the output.
+
+---
+
+## Quick Revision Table
+
+| Problem                         | Goal                                                | Main Idea                                               | Technique                     |
+| ------------------------------- | --------------------------------------------------- | ------------------------------------------------------- | ----------------------------- |
+| Clone Graph                     | Create a deep copy of a graph                       | Clone each node once and reuse clones                   | DFS/BFS + HashMap             |
+| Find the Town Judge             | Find a node trusted by everyone and trusting no one | Count incoming and outgoing trust using one score array | Degree Counting               |
+| Graph Representation            | Store graph efficiently                             | Use adjacency list or adjacency matrix                  | Data Structure                |
+| Find Center of Star Graph       | Find the central node                               | Common node in the first two edges or highest degree    | Observation / Degree Counting |
+| All Paths From Source to Target | Return every path from source to destination        | Explore every possible route and backtrack              | DFS + Backtracking            |
+
+A useful interview rule is:
+
+* **Need to explore the graph?** → DFS/BFS.
+* **Need all possible paths?** → DFS + Backtracking.
+* **Need only node connection counts?** → Degree Counting.
+* **Need to avoid revisiting nodes in cyclic graphs?** → DFS/BFS + `visited` or `HashMap`.
