@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Mastery — The Ultimate Practice Sheet</title>
+<style>
+:root{
+  --bg:#0a0e14;
+  --bg-elev1:#10151f;
+  --bg-elev2:#161c29;
+  --bg-elev3:#1c2333;
+  --border:#242c40;
+  --border-soft:#1a2032;
+  --text-hi:#e8ecf5;
+  --text-mid:#9aa5bd;
+  --text-low:#5d6786;
+  --accent:#4fd1c5;
+  --accent-soft:rgba(79,209,197,0.12);
+  --accent-glow:rgba(79,209,197,0.35);
+  --violet:#8b7bf0;
+  --violet-soft:rgba(139,123,240,0.14);
+  --amber:#f0b93b;
+  --amber-soft:rgba(240,185,59,0.14);
+  --rose:#f0637b;
+  --rose-soft:rgba(240,99,123,0.14);
+  --easy:#4fd18b;
+  --easy-soft:rgba(79,209,139,0.14);
+  --medium:#f0b93b;
+  --medium-soft:rgba(240,185,59,0.14);
+  --hard:#f0637b;
+  --hard-soft:rgba(240,99,123,0.14);
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:20px;
+  --font-display:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:
+    radial-gradient(ellipse 1200px 600px at 15% -10%, rgba(139,123,240,0.10), transparent 60%),
+    radial-gradient(ellipse 1000px 700px at 100% 0%, rgba(79,209,197,0.08), transparent 55%),
+    var(--bg);
+  color:var(--text-hi);
+  font-family:var(--font-body);
+  line-height:1.5;
+  min-height:100vh;
+  padding-bottom:80px;
+}
+
+/* ============ TOP NAV ============ */
+.topbar{
+  position:sticky; top:0; z-index:100;
+  background:rgba(10,14,20,0.85);
+  backdrop-filter:blur(16px) saturate(160%);
+  border-bottom:1px solid var(--border-soft);
+  padding:16px 32px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand-mark{
+  width:38px; height:38px; border-radius:10px;
+  background:linear-gradient(135deg, var(--accent), var(--violet));
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:800; font-size:16px; color:#0a0e14;
+  box-shadow:0 4px 20px var(--accent-glow);
+}
+.brand-text h1{
+  font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.01em;
+  color:var(--text-hi);
+}
+.brand-text span{font-size:11px; color:var(--text-low); font-family:var(--font-mono); letter-spacing:0.05em;}
+
+.topbar-actions{display:flex; gap:10px; align-items:center;}
+.btn{
+  font-family:var(--font-body); font-weight:600; font-size:13px;
+  padding:9px 16px; border-radius:var(--radius-sm);
+  border:1px solid var(--border); background:var(--bg-elev2); color:var(--text-mid);
+  cursor:pointer; transition:all .18s ease; display:flex; align-items:center; gap:6px;
+}
+.btn:hover{border-color:var(--accent); color:var(--text-hi); transform:translateY(-1px);}
+.btn-danger:hover{border-color:var(--rose); color:var(--rose);}
+.btn-primary{background:linear-gradient(135deg, var(--accent), #3db8ac); color:#06110f; border:none;}
+.btn-primary:hover{box-shadow:0 4px 18px var(--accent-glow); color:#06110f;}
+
+/* ============ HERO / DASHBOARD ============ */
+.dashboard{max-width:1400px; margin:0 auto; padding:36px 32px 8px;}
+.hero-eyebrow{
+  font-family:var(--font-mono); font-size:12px; color:var(--accent); letter-spacing:0.12em;
+  text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px;
+}
+.hero-eyebrow::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent-glow);}
+.hero-title{
+  font-family:var(--font-display); font-weight:800; font-size:clamp(28px,4vw,42px);
+  letter-spacing:-0.02em; line-height:1.08; margin-bottom:10px;
+  background:linear-gradient(135deg, #fff 30%, var(--text-mid));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.hero-sub{color:var(--text-mid); font-size:15px; max-width:640px; margin-bottom:28px;}
+
+/* Stat grid */
+.stat-grid{
+  display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:20px;
+}
+.stat-card{
+  background:var(--bg-elev1); border:1px solid var(--border-soft); border-radius:var(--radius-md);
+  padding:18px 18px; position:relative; overflow:hidden; transition:border-color .2s ease, transform .2s ease;
+}
+.stat-card:hover{transform:translateY(-2px); border-color:var(--border);}
+.stat-card .glow{position:absolute; top:-30px; right:-30px; width:90px; height:90px; border-radius:50%; filter:blur(30px); opacity:0.5;}
+.stat-label{font-size:11px; color:var(--text-low); text-transform:uppercase; letter-spacing:0.07em; font-weight:600; margin-bottom:8px;}
+.stat-value{font-family:var(--font-display); font-size:28px; font-weight:800; letter-spacing:-0.01em;}
+.stat-value.easy{color:var(--easy);}
+.stat-value.medium{color:var(--medium);}
+.stat-value.hard{color:var(--hard);}
+.stat-value.accent{color:var(--accent);}
+
+/* progress panel */
+.progress-panel{
+  background:var(--bg-elev1); border:1px solid var(--border-soft); border-radius:var(--radius-lg);
+  padding:26px 28px; margin-bottom:8px;
+  display:grid; grid-template-columns:1fr 280px; gap:32px; align-items:center;
+}
+.progress-left h3{font-family:var(--font-display); font-size:16px; font-weight:700; margin-bottom:4px;}
+.progress-left p{font-size:13px; color:var(--text-low); margin-bottom:16px;}
+.bar-track{
+  width:100%; height:12px; background:var(--bg-elev3); border-radius:999px; overflow:hidden;
+  position:relative; border:1px solid var(--border-soft);
+}
+.bar-fill{
+  height:100%; border-radius:999px;
+  background:linear-gradient(90deg, var(--accent), var(--violet));
+  width:0%; transition:width .6s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 12px var(--accent-glow);
+}
+.progress-meta{display:flex; justify-content:space-between; margin-top:10px; font-size:12px; color:var(--text-low); font-family:var(--font-mono);}
+.progress-right{text-align:center; border-left:1px solid var(--border-soft); padding-left:32px;}
+.ring-wrap{position:relative; width:140px; height:140px; margin:0 auto 8px;}
+.ring-pct{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-size:26px; font-weight:800; color:var(--text-hi);
+}
+.readiness-label{font-size:11px; color:var(--text-low); text-transform:uppercase; letter-spacing:0.06em; font-weight:600;}
+
+/* ============ CONTROLS ============ */
+.controls-bar{
+  max-width:1400px; margin:24px auto 0; padding:0 32px;
+  display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+  position:sticky; top:78px; z-index:90;
+  background:rgba(10,14,20,0.88); backdrop-filter:blur(14px);
+  padding-top:14px; padding-bottom:14px;
+}
+.search-wrap{flex:1; min-width:220px; position:relative;}
+.search-wrap svg{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; stroke:var(--text-low);}
+#searchInput{
+  width:100%; padding:11px 14px 11px 40px; border-radius:var(--radius-sm);
+  background:var(--bg-elev2); border:1px solid var(--border); color:var(--text-hi);
+  font-family:var(--font-body); font-size:14px; outline:none; transition:border-color .18s ease;
+}
+#searchInput:focus{border-color:var(--accent);}
+#searchInput::placeholder{color:var(--text-low);}
+
+select{
+  padding:11px 32px 11px 14px; border-radius:var(--radius-sm);
+  background:var(--bg-elev2); border:1px solid var(--border); color:var(--text-mid);
+  font-family:var(--font-body); font-size:13px; font-weight:500; outline:none; cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0L5 6L10 0' fill='none' stroke='%235d6786' stroke-width='1.5'/></svg>");
+  background-repeat:no-repeat; background-position:right 12px center;
+  transition:border-color .18s ease;
+}
+select:hover, select:focus{border-color:var(--accent);}
+
+.chip-toggle{
+  display:flex; gap:6px; background:var(--bg-elev2); padding:4px; border-radius:var(--radius-sm); border:1px solid var(--border);
+}
+.chip-toggle button{
+  padding:7px 12px; border-radius:6px; border:none; background:transparent; color:var(--text-low);
+  font-size:12px; font-weight:600; cursor:pointer; transition:all .15s ease; font-family:var(--font-body);
+}
+.chip-toggle button.active{background:var(--accent); color:#06110f;}
+
+/* ============ TOPIC SECTIONS ============ */
+.content{max-width:1400px; margin:0 auto; padding:20px 32px 40px;}
+
+.topic-section{
+  margin-bottom:16px; border:1px solid var(--border-soft); border-radius:var(--radius-md);
+  background:var(--bg-elev1); overflow:hidden;
+}
+.topic-header{
+  padding:18px 22px; display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; user-select:none; gap:16px; flex-wrap:wrap;
+}
+.topic-header:hover{background:var(--bg-elev2);}
+.topic-header-left{display:flex; align-items:center; gap:14px; flex:1; min-width:260px;}
+.topic-chevron{
+  width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+  transition:transform .25s ease; color:var(--text-low); flex-shrink:0;
+}
+.topic-section.collapsed .topic-chevron{transform:rotate(-90deg);}
+.topic-name{font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--text-hi);}
+.topic-count{font-family:var(--font-mono); font-size:12px; color:var(--text-low);}
+.topic-progress-mini{
+  display:flex; align-items:center; gap:10px; min-width:180px;
+}
+.topic-bar-track{flex:1; height:6px; background:var(--bg-elev3); border-radius:99px; overflow:hidden; min-width:100px;}
+.topic-bar-fill{height:100%; background:linear-gradient(90deg,var(--accent),var(--violet)); border-radius:99px; transition:width .4s ease;}
+.topic-progress-text{font-family:var(--font-mono); font-size:11px; color:var(--text-low); white-space:nowrap;}
+
+.diff-pills{display:flex; gap:6px;}
+.pill{font-size:10px; font-weight:700; padding:3px 8px; border-radius:99px; font-family:var(--font-mono);}
+.pill.easy{background:var(--easy-soft); color:var(--easy);}
+.pill.medium{background:var(--medium-soft); color:var(--medium);}
+.pill.hard{background:var(--hard-soft); color:var(--hard);}
+
+.topic-body{
+  max-height:5000px; overflow:hidden; transition:max-height .35s ease, padding .35s ease;
+  padding:0 22px 18px;
+}
+.topic-section.collapsed .topic-body{max-height:0; padding:0 22px;}
+
+.q-table-head{
+  display:grid; grid-template-columns:36px 1fr 90px 100px 110px 90px; gap:12px;
+  padding:8px 14px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+  color:var(--text-low); font-weight:600; border-bottom:1px solid var(--border-soft);
+}
+
+.q-row{
+  display:grid; grid-template-columns:36px 1fr 90px 100px 110px 90px; gap:12px; align-items:center;
+  padding:13px 14px; border-radius:10px; transition:background .15s ease;
+  border-bottom:1px solid var(--border-soft);
+}
+.q-row:last-child{border-bottom:none;}
+.q-row:hover{background:var(--bg-elev2);}
+.q-row.solved{opacity:0.55;}
+.q-row.solved .q-name{text-decoration:line-through; text-decoration-color:var(--text-low);}
+
+.checkbox{
+  width:20px; height:20px; border-radius:6px; border:2px solid var(--border);
+  cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s ease;
+  background:var(--bg-elev2); flex-shrink:0;
+}
+.checkbox.checked{background:var(--accent); border-color:var(--accent);}
+.checkbox svg{width:12px; height:12px; opacity:0; transition:opacity .12s ease; stroke:#06110f; stroke-width:3;}
+.checkbox.checked svg{opacity:1;}
+
+.q-main a{color:var(--text-hi); text-decoration:none; font-weight:600; font-size:14px; transition:color .15s ease;}
+.q-main a:hover{color:var(--accent);}
+.q-num{font-family:var(--font-mono); font-size:11px; color:var(--text-low); margin-right:6px;}
+.q-desc{font-size:12.5px; color:var(--text-mid); margin-top:3px;}
+.q-pattern{font-size:11px; color:var(--violet); margin-top:4px; font-family:var(--font-mono);}
+
+.q-diff{text-align:left;}
+.q-platform{font-size:12px; color:var(--text-mid); font-weight:500;}
+.q-notes-btn{
+  font-size:11px; color:var(--text-low); background:var(--bg-elev2); border:1px solid var(--border);
+  padding:6px 10px; border-radius:7px; cursor:pointer; transition:all .15s ease; font-family:var(--font-body);
+  white-space:nowrap;
+}
+.q-notes-btn:hover{border-color:var(--accent); color:var(--accent);}
+.q-notes-btn.has-note{border-color:var(--amber); color:var(--amber);}
+
+.q-notes-area{
+  grid-column:1/-1; margin-top:8px; display:none;
+}
+.q-notes-area.open{display:block;}
+.q-notes-area textarea{
+  width:100%; min-height:60px; background:var(--bg-elev3); border:1px solid var(--border);
+  border-radius:8px; padding:10px 12px; color:var(--text-hi); font-family:var(--font-body); font-size:13px;
+  resize:vertical; outline:none;
+}
+.q-notes-area textarea:focus{border-color:var(--accent);}
+
+.empty-state{text-align:center; padding:60px 20px; color:var(--text-low);}
+.empty-state h3{font-family:var(--font-display); color:var(--text-mid); margin-bottom:6px;}
+
+/* ============ FOOTER STATS ============ */
+.footer-section{max-width:1400px; margin:40px auto 0; padding:0 32px;}
+.footer-title{font-family:var(--font-display); font-size:22px; font-weight:800; margin-bottom:20px; letter-spacing:-0.01em;}
+
+.stats-grid-footer{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:24px;}
+.topic-stat-card{
+  background:var(--bg-elev1); border:1px solid var(--border-soft); border-radius:12px; padding:14px 16px;
+}
+.topic-stat-name{font-size:13px; font-weight:600; color:var(--text-hi); margin-bottom:8px;}
+.topic-stat-bar{height:6px; background:var(--bg-elev3); border-radius:99px; overflow:hidden; margin-bottom:6px;}
+.topic-stat-fill{height:100%; background:linear-gradient(90deg,var(--accent),var(--violet)); border-radius:99px;}
+.topic-stat-text{font-size:11px; color:var(--text-low); font-family:var(--font-mono);}
+
+.readiness-panel{
+  background:linear-gradient(135deg, var(--bg-elev1), var(--bg-elev2));
+  border:1px solid var(--border-soft); border-radius:var(--radius-lg); padding:28px;
+  display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px; align-items:center;
+}
+.readiness-panel h3{font-family:var(--font-display); font-size:18px; margin-bottom:8px;}
+.readiness-panel p{color:var(--text-mid); font-size:13.5px; line-height:1.6;}
+.readiness-score{text-align:center;}
+.readiness-score .big-num{font-family:var(--font-display); font-size:48px; font-weight:800; color:var(--accent);}
+.readiness-score .big-label{font-size:12px; color:var(--text-low); text-transform:uppercase; letter-spacing:0.08em; margin-top:4px;}
+
+.quote-panel{
+  text-align:center; padding:36px 24px; border-radius:var(--radius-lg);
+  background:radial-gradient(ellipse at center, var(--violet-soft), transparent 70%), var(--bg-elev1);
+  border:1px solid var(--border-soft); margin-bottom:20px;
+}
+.quote-text{font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--text-hi); max-width:640px; margin:0 auto 10px; font-style:italic; line-height:1.5;}
+.quote-author{font-size:12px; color:var(--text-low); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.06em;}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1000px){
+  .stat-grid{grid-template-columns:repeat(3,1fr);}
+  .progress-panel{grid-template-columns:1fr; gap:20px;}
+  .progress-right{border-left:none; border-top:1px solid var(--border-soft); padding-left:0; padding-top:20px;}
+  .readiness-panel{grid-template-columns:1fr;}
+}
+@media (max-width:720px){
+  .topbar{padding:14px 16px;}
+  .dashboard{padding:24px 16px 8px;}
+  .controls-bar{padding:12px 16px; top:70px;}
+  .content{padding:16px 16px 40px;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .q-table-head{display:none;}
+  .q-row{grid-template-columns:32px 1fr; grid-template-areas:"cb main" "cb meta" "cb notes"; row-gap:6px;}
+  .checkbox{grid-area:cb;}
+  .q-main{grid-area:main;}
+  .q-diff, .q-platform{grid-area:meta;}
+  .q-diff{display:inline-block; margin-right:8px;}
+  .q-notes-btn{grid-area:notes; justify-self:start; margin-top:4px;}
+  .topic-progress-mini{min-width:120px;}
+  .footer-section{padding:0 16px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">G</div>
+    <div class="brand-text">
+      <h1>Graph Mastery</h1>
+      <span>THE ULTIMATE PRACTICE SHEET</span>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn" id="expandAllBtn">Expand All</button>
+    <button class="btn" id="collapseAllBtn">Collapse All</button>
+    <button class="btn btn-danger" id="resetBtn">Reset Progress</button>
+  </div>
+</div>
+
+<div class="dashboard">
+  <div class="hero-eyebrow">24 topics · 245 curated problems</div>
+  <h1 class="hero-title">From Adjacency Lists to Tarjan's SCC</h1>
+  <p class="hero-sub">Every graph pattern a Google interview can throw at you — organized, tracked, and ready to grind. Progress saves automatically in your browser.</p>
+
+  <div class="stat-grid" id="statGrid">
+    <div class="stat-card"><div class="glow" style="background:var(--accent);"></div>
+      <div class="stat-label">Total Questions</div><div class="stat-value accent" id="statTotal">0</div></div>
+    <div class="stat-card"><div class="glow" style="background:var(--easy);"></div>
+      <div class="stat-label">Easy</div><div class="stat-value easy" id="statEasy">0</div></div>
+    <div class="stat-card"><div class="glow" style="background:var(--medium);"></div>
+      <div class="stat-label">Medium</div><div class="stat-value medium" id="statMedium">0</div></div>
+    <div class="stat-card"><div class="glow" style="background:var(--hard);"></div>
+      <div class="stat-label">Hard</div><div class="stat-value hard" id="statHard">0</div></div>
+    <div class="stat-card"><div class="glow" style="background:var(--accent);"></div>
+      <div class="stat-label">Solved</div><div class="stat-value accent" id="statSolved">0</div></div>
+    <div class="stat-card"><div class="glow" style="background:var(--violet);"></div>
+      <div class="stat-label">Remaining</div><div class="stat-value" id="statRemaining" style="color:var(--violet);">0</div></div>
+  </div>
+
+  <div class="progress-panel">
+    <div class="progress-left">
+      <h3>Overall Progress</h3>
+      <p>Keep the streak going — consistency beats intensity.</p>
+      <div class="bar-track"><div class="bar-fill" id="mainBar"></div></div>
+      <div class="progress-meta">
+        <span id="progressMetaLeft">0 / 0 solved</span>
+        <span id="progressMetaRight">0%</span>
+      </div>
+    </div>
+    <div class="progress-right">
+      <div class="ring-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="60" fill="none" stroke="#1c2333" stroke-width="12"/>
+          <circle id="ringProgress" cx="70" cy="70" r="60" fill="none" stroke="url(#ringGrad)" stroke-width="12"
+            stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377" transform="rotate(-90 70 70)"/>
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4fd1c5"/>
+              <stop offset="100%" stop-color="#8b7bf0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="ring-pct" id="ringPct">0%</div>
+      </div>
+      <div class="readiness-label">Completion</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls-bar">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
+    <input type="text" id="searchInput" placeholder="Search by name, pattern, or platform…">
+  </div>
+  <select id="topicFilter"><option value="all">All Topics</option></select>
+  <select id="diffFilter">
+    <option value="all">All Difficulties</option>
+    <option value="Easy">Easy</option>
+    <option value="Medium">Medium</option>
+    <option value="Hard">Hard</option>
+  </select>
+  <select id="platformFilter"><option value="all">All Platforms</option></select>
+  <div class="chip-toggle">
+    <button class="active" data-status="all">All</button>
+    <button data-status="solved">Solved</button>
+    <button data-status="unsolved">Unsolved</button>
+  </div>
+</div>
+
+<div class="content" id="content"></div>
+
+<div class="footer-section">
+  <h2 class="footer-title">Topic-wise Completion</h2>
+  <div class="stats-grid-footer" id="topicStatsGrid"></div>
+
+  <div class="readiness-panel">
+    <div>
+      <h3>Interview Readiness</h3>
+      <p>A blended score weighting your progress across foundational traversal, shortest-path algorithms, MST/DSU, and advanced connectivity topics (bridges, articulation points, SCCs) — the areas Google graph interviews lean on most.</p>
+    </div>
+    <div class="readiness-score">
+      <div class="big-num" id="readinessScore">0%</div>
+      <div class="big-label">Estimated Readiness</div>
+    </div>
+  </div>
+
+  <div class="quote-panel">
+    <div class="quote-text" id="quoteText">"The best way to predict the future is to implement it, one edge at a time."</div>
+    <div class="quote-author">Keep grinding, engineer</div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [{"topic":"Graph Representation","name":"Clone Graph","diff":"Medium","platform":"LeetCode","num":"133","pattern":"DFS/BFS + HashMap","desc":"Deep clone a connected undirected graph.","link":"https://leetcode.com/problems/clone-graph/","id":"q1"},{"topic":"Graph Representation","name":"Find the Town Judge","diff":"Easy","platform":"LeetCode","num":"997","pattern":"In-degree/Out-degree","desc":"Find the node trusted by everyone but trusts no one.","link":"https://leetcode.com/problems/find-the-town-judge/","id":"q2"},{"topic":"Graph Representation","name":"Graph and its representation","diff":"Easy","platform":"GeeksforGeeks","num":"","pattern":"Adjacency List/Matrix","desc":"Build and represent a graph using list and matrix forms.","link":"https://www.geeksforgeeks.org/graph-and-its-representations/","id":"q3"},{"topic":"Graph Representation","name":"Find Center of Star Graph","diff":"Easy","platform":"LeetCode","num":"1791","pattern":"Degree Counting","desc":"Identify the center node of a star-shaped graph.","link":"https://leetcode.com/problems/find-center-of-star-graph/","id":"q4"},{"topic":"Graph Representation","name":"All Paths From Source to Target","diff":"Medium","platform":"LeetCode","num":"797","pattern":"Adjacency List + Backtracking","desc":"Enumerate all paths from node 0 to node n-1 in a DAG.","link":"https://leetcode.com/problems/all-paths-from-source-to-target/","id":"q5"},{"topic":"BFS","name":"Flood Fill","diff":"Easy","platform":"LeetCode","num":"733","pattern":"Grid BFS","desc":"Flood fill a region of the same color starting from a pixel.","link":"https://leetcode.com/problems/flood-fill/","id":"q6"},{"topic":"BFS","name":"Number of Islands","diff":"Medium","platform":"LeetCode","num":"200","pattern":"Grid BFS/DFS","desc":"Count connected islands of land cells in a grid.","link":"https://leetcode.com/problems/number-of-islands/","id":"q7"},{"topic":"BFS","name":"Rotting Oranges","diff":"Medium","platform":"LeetCode","num":"994","pattern":"Multi-source BFS","desc":"Find minimum time for all oranges to rot via spreading.","link":"https://leetcode.com/problems/rotting-oranges/","id":"q8"},{"topic":"BFS","name":"Word Ladder","diff":"Hard","platform":"LeetCode","num":"127","pattern":"BFS on implicit graph","desc":"Find shortest transformation sequence between two words.","link":"https://leetcode.com/problems/word-ladder/","id":"q9"},{"topic":"BFS","name":"01 Matrix","diff":"Medium","platform":"LeetCode","num":"542","pattern":"Multi-source BFS","desc":"Find distance to nearest 0 for every cell in a binary matrix.","link":"https://leetcode.com/problems/01-matrix/","id":"q10"},{"topic":"BFS","name":"Snakes and Ladders","diff":"Medium","platform":"LeetCode","num":"909","pattern":"BFS on board graph","desc":"Find minimum moves to reach the last square on a board.","link":"https://leetcode.com/problems/snakes-and-ladders/","id":"q11"},{"topic":"BFS","name":"Shortest Path in Binary Matrix","diff":"Medium","platform":"LeetCode","num":"1091","pattern":"8-directional BFS","desc":"Find shortest clear path from top-left to bottom-right.","link":"https://leetcode.com/problems/shortest-path-in-binary-matrix/","id":"q12"},{"topic":"BFS","name":"Open the Lock","diff":"Medium","platform":"LeetCode","num":"752","pattern":"BFS on state space","desc":"Find minimum turns to reach a target lock combination.","link":"https://leetcode.com/problems/open-the-lock/","id":"q13"},{"topic":"BFS","name":"Level Order Traversal of a Graph/Tree","diff":"Easy","platform":"GeeksforGeeks","num":"","pattern":"Layered BFS","desc":"Traverse a graph level by level from a source node.","link":"https://www.geeksforgeeks.org/level-order-tree-traversal/","id":"q14"},{"topic":"BFS","name":"Word Ladder II","diff":"Hard","platform":"LeetCode","num":"126","pattern":"BFS + Path Reconstruction","desc":"Return all shortest transformation sequences between two words.","link":"https://leetcode.com/problems/word-ladder-ii/","id":"q15"},{"topic":"BFS","name":"Labyrinth","diff":"Medium","platform":"CSES","num":"","pattern":"Grid BFS + Path Reconstruction","desc":"Find shortest path through a labyrinth and print the route.","link":"https://cses.fi/problemset/task/1193","id":"q16"},{"topic":"BFS","name":"Message Route","diff":"Easy","platform":"CSES","num":"","pattern":"Plain BFS shortest path","desc":"Find shortest route between two computers in a network.","link":"https://cses.fi/problemset/task/1667","id":"q17"},{"topic":"DFS","name":"Max Area of Island","diff":"Medium","platform":"LeetCode","num":"695","pattern":"Grid DFS","desc":"Find the area of the largest island in a binary grid.","link":"https://leetcode.com/problems/max-area-of-island/","id":"q18"},{"topic":"DFS","name":"Number of Provinces","diff":"Medium","platform":"LeetCode","num":"547","pattern":"DFS on adjacency matrix","desc":"Count the number of connected provinces (cities) in a matrix.","link":"https://leetcode.com/problems/number-of-provinces/","id":"q19"},{"topic":"DFS","name":"Surrounded Regions","diff":"Medium","platform":"LeetCode","num":"130","pattern":"Boundary DFS","desc":"Capture all regions surrounded by 'X' on a board.","link":"https://leetcode.com/problems/surrounded-regions/","id":"q20"},{"topic":"DFS","name":"Pacific Atlantic Water Flow","diff":"Medium","platform":"LeetCode","num":"417","pattern":"Multi-source reverse DFS","desc":"Find cells from which water can flow to both oceans.","link":"https://leetcode.com/problems/pacific-atlantic-water-flow/","id":"q21"},{"topic":"DFS","name":"Path with Maximum Gold","diff":"Medium","platform":"LeetCode","num":"1219","pattern":"Backtracking DFS","desc":"Find the path collecting maximum gold without revisiting cells.","link":"https://leetcode.com/problems/path-with-maximum-gold/","id":"q22"},{"topic":"DFS","name":"Reconstruct Itinerary","diff":"Hard","platform":"LeetCode","num":"332","pattern":"Eulerian Path (Hierholzer)","desc":"Reconstruct itinerary visiting all tickets in lexical order.","link":"https://leetcode.com/problems/reconstruct-itinerary/","id":"q23"},{"topic":"DFS","name":"Number of Enclaves","diff":"Medium","platform":"LeetCode","num":"1020","pattern":"Boundary elimination DFS","desc":"Count land cells that can't reach the grid boundary.","link":"https://leetcode.com/problems/number-of-enclaves/","id":"q24"},{"topic":"DFS","name":"Critical Connections in a Network","diff":"Hard","platform":"LeetCode","num":"1192","pattern":"DFS Tree + Low-link","desc":"Find all bridges (critical connections) in a network.","link":"https://leetcode.com/problems/critical-connections-in-a-network/","id":"q25"},{"topic":"DFS","name":"All Paths from Source Lead to Destination","diff":"Medium","platform":"LeetCode","num":"1059","pattern":"DFS with cycle/leaf check","desc":"Check if every path from source eventually reaches destination.","link":"https://leetcode.com/problems/all-paths-from-source-lead-to-destination/","id":"q26"},{"topic":"DFS","name":"Building Roads","diff":"Easy","platform":"CSES","num":"","pattern":"DFS connected components","desc":"Connect all cities using minimum extra roads via DFS components.","link":"https://cses.fi/problemset/task/1666","id":"q27"},{"topic":"DFS","name":"Keys and Rooms","diff":"Medium","platform":"LeetCode","num":"841","pattern":"DFS reachability","desc":"Determine if you can visit all rooms starting from room 0.","link":"https://leetcode.com/problems/keys-and-rooms/","id":"q28"},{"topic":"DFS","name":"Count Sub Islands","diff":"Medium","platform":"LeetCode","num":"1905","pattern":"DFS grid matching","desc":"Count islands in grid2 that are sub-islands of grid1.","link":"https://leetcode.com/problems/count-sub-islands/","id":"q29"},{"topic":"Connected Components","name":"Number of Connected Components in an Undirected Graph","diff":"Medium","platform":"LeetCode","num":"323","pattern":"DFS/BFS/Union-Find","desc":"Count connected components in an undirected graph.","link":"https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/","id":"q30"},{"topic":"Connected Components","name":"Friend Circles","diff":"Medium","platform":"LeetCode","num":"547","pattern":"Union-Find/DFS","desc":"Find number of friend circles from a friendship matrix.","link":"https://leetcode.com/problems/number-of-provinces/","id":"q31"},{"topic":"Connected Components","name":"Employee Importance","diff":"Medium","platform":"LeetCode","num":"690","pattern":"DFS on tree/graph","desc":"Compute total importance value of an employee and subordinates.","link":"https://leetcode.com/problems/employee-importance/","id":"q32"},{"topic":"Connected Components","name":"Regions Cut By Slashes","diff":"Medium","platform":"LeetCode","num":"959","pattern":"Grid subdivision + Union-Find","desc":"Count regions formed by slashes drawn inside grid cells.","link":"https://leetcode.com/problems/regions-cut-by-slashes/","id":"q33"},{"topic":"Connected Components","name":"Making a Large Island","diff":"Hard","platform":"LeetCode","num":"827","pattern":"Component labeling + simulation","desc":"Find largest island achievable by changing one 0 to 1.","link":"https://leetcode.com/problems/making-a-large-island/","id":"q34"},{"topic":"Connected Components","name":"Similar String Groups","diff":"Hard","platform":"LeetCode","num":"839","pattern":"Union-Find on similarity graph","desc":"Count groups of strings that are similar to each other.","link":"https://leetcode.com/problems/similar-string-groups/","id":"q35"},{"topic":"Connected Components","name":"Water Supply","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"MST-like component merging","desc":"Determine minimum cost to supply water using wells and pipes.","link":"https://www.geeksforgeeks.org/minimum-cost-to-provide-water-to-all-houses/","id":"q36"},{"topic":"Connected Components","name":"Road Construction","diff":"Medium","platform":"CSES","num":"","pattern":"Union-Find with component tracking","desc":"Track number of components while adding roads incrementally.","link":"https://cses.fi/problemset/task/1676","id":"q37"},{"topic":"Cycle Detection","name":"Course Schedule","diff":"Medium","platform":"LeetCode","num":"207","pattern":"Directed cycle detection","desc":"Determine if all courses can be finished (no directed cycle).","link":"https://leetcode.com/problems/course-schedule/","id":"q38"},{"topic":"Cycle Detection","name":"Detect Cycle in Undirected Graph","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS/Union-Find cycle check","desc":"Detect whether an undirected graph contains a cycle.","link":"https://www.geeksforgeeks.org/detect-cycle-undirected-graph/","id":"q39"},{"topic":"Cycle Detection","name":"Detect Cycle in Directed Graph","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS recursion stack","desc":"Detect whether a directed graph contains a cycle.","link":"https://www.geeksforgeeks.org/detect-cycle-in-a-graph/","id":"q40"},{"topic":"Cycle Detection","name":"Graph Valid Tree","diff":"Medium","platform":"LeetCode","num":"261","pattern":"Union-Find/DFS cycle+connectivity","desc":"Check if edges form a valid tree (no cycles, fully connected).","link":"https://leetcode.com/problems/graph-valid-tree/","id":"q41"},{"topic":"Cycle Detection","name":"Redundant Connection","diff":"Medium","platform":"LeetCode","num":"684","pattern":"Union-Find edge that creates cycle","desc":"Find the edge that can be removed to make a tree.","link":"https://leetcode.com/problems/redundant-connection/","id":"q42"},{"topic":"Cycle Detection","name":"Redundant Connection II","diff":"Hard","platform":"LeetCode","num":"685","pattern":"Union-Find on directed rooted tree","desc":"Find edge to remove to restore a valid rooted tree structure.","link":"https://leetcode.com/problems/redundant-connection-ii/","id":"q43"},{"topic":"Cycle Detection","name":"Course Schedule II","diff":"Medium","platform":"LeetCode","num":"210","pattern":"Cycle detection + Topo order","desc":"Return a valid course order or detect impossibility.","link":"https://leetcode.com/problems/course-schedule-ii/","id":"q44"},{"topic":"Cycle Detection","name":"Round Trip","diff":"Medium","platform":"CSES","num":"","pattern":"Undirected cycle finding","desc":"Find and print any cycle in an undirected graph.","link":"https://cses.fi/problemset/task/1669","id":"q45"},{"topic":"Cycle Detection","name":"Round Trip II","diff":"Medium","platform":"CSES","num":"","pattern":"Directed cycle finding","desc":"Find and print any cycle in a directed graph.","link":"https://cses.fi/problemset/task/1678","id":"q46"},{"topic":"Cycle Detection","name":"Find Eventual Safe States","diff":"Medium","platform":"LeetCode","num":"802","pattern":"3-color DFS cycle detection","desc":"Find nodes from which every path leads to a terminal node.","link":"https://leetcode.com/problems/find-eventual-safe-states/","id":"q47"},{"topic":"Bipartite","name":"Is Graph Bipartite?","diff":"Medium","platform":"LeetCode","num":"785","pattern":"2-Coloring BFS/DFS","desc":"Determine if a graph can be 2-colored (bipartite).","link":"https://leetcode.com/problems/is-graph-bipartite/","id":"q48"},{"topic":"Bipartite","name":"Possible Bipartition","diff":"Medium","platform":"LeetCode","num":"886","pattern":"2-Coloring with dislike edges","desc":"Split people into two groups given pairwise dislikes.","link":"https://leetcode.com/problems/possible-bipartition/","id":"q49"},{"topic":"Bipartite","name":"Bipartite Graph Check","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"BFS/DFS 2-coloring","desc":"Check whether a given graph is bipartite.","link":"https://www.geeksforgeeks.org/bipartite-graph/","id":"q50"},{"topic":"Bipartite","name":"Maximum Bipartite Matching","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Kuhn's Algorithm","desc":"Find maximum matching between two disjoint sets of vertices.","link":"https://www.geeksforgeeks.org/maximum-bipartite-matching/","id":"q51"},{"topic":"Bipartite","name":"Sum of Two Values","diff":"Medium","platform":"AtCoder","num":"","pattern":"Bipartite-style pairing check","desc":"Judge library problem style bipartite matching exercise.","link":"https://atcoder.jp/contests/practice2/tasks/practice2_h","id":"q52"},{"topic":"Bipartite","name":"Flower Planting With No Adjacent","diff":"Medium","platform":"LeetCode","num":"1042","pattern":"Graph coloring (k-colors)","desc":"Assign flower types so adjacent gardens differ.","link":"https://leetcode.com/problems/flower-planting-with-no-adjacent/","id":"q53"},{"topic":"Bipartite","name":"Divide the Class","diff":"Medium","platform":"HackerRank","num":"","pattern":"Bipartite grouping","desc":"Divide students into two teams with conflicting constraints.","link":"https://www.hackerrank.com/challenges/coloring-a-graph","id":"q54"},{"topic":"Bipartite","name":"Job Match","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Hopcroft-Karp / bipartite matching","desc":"Match jobs to applicants maximizing successful assignments.","link":"https://www.geeksforgeeks.org/hopcroft-karp-algorithm-for-maximum-matching-set-1-introduction/","id":"q55"},{"topic":"Topological Sort","name":"Topological Sorting","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS-based Topo Sort","desc":"Return a topological order of vertices in a DAG.","link":"https://www.geeksforgeeks.org/topological-sorting/","id":"q56"},{"topic":"Topological Sort","name":"Course Schedule II","diff":"Medium","platform":"LeetCode","num":"210","pattern":"Kahn's Algorithm (BFS)","desc":"Find a valid order to finish all courses given prerequisites.","link":"https://leetcode.com/problems/course-schedule-ii/","id":"q57"},{"topic":"Topological Sort","name":"Alien Dictionary","diff":"Hard","platform":"LeetCode","num":"269","pattern":"Topo sort on derived graph","desc":"Derive character order of an alien language from sorted words.","link":"https://leetcode.com/problems/alien-dictionary/","id":"q58"},{"topic":"Topological Sort","name":"Course Schedule IV","diff":"Medium","platform":"LeetCode","num":"1462","pattern":"Topo sort + reachability","desc":"Answer prerequisite queries between pairs of courses.","link":"https://leetcode.com/problems/course-schedule-iv/","id":"q59"},{"topic":"Topological Sort","name":"Minimum Height Trees","diff":"Medium","platform":"LeetCode","num":"310","pattern":"Layered leaf trimming (Topo-like)","desc":"Find roots that minimize the height of the resulting tree.","link":"https://leetcode.com/problems/minimum-height-trees/","id":"q60"},{"topic":"Topological Sort","name":"Sequence Reconstruction","diff":"Medium","platform":"LeetCode","num":"444","pattern":"Unique topo order check","desc":"Check if sequences uniquely reconstruct the original sequence.","link":"https://leetcode.com/problems/sequence-reconstruction/","id":"q61"},{"topic":"Topological Sort","name":"Parallel Courses","diff":"Medium","platform":"LeetCode","num":"1136","pattern":"Kahn's Algorithm with levels","desc":"Find minimum semesters to complete all courses.","link":"https://leetcode.com/problems/parallel-courses/","id":"q62"},{"topic":"Topological Sort","name":"Sort Items by Groups Respecting Dependencies","diff":"Hard","platform":"LeetCode","num":"1203","pattern":"Two-level topological sort","desc":"Sort items respecting both group and item dependencies.","link":"https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/","id":"q63"},{"topic":"Topological Sort","name":"Longest Path in a DAG","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Topo sort + DP","desc":"Find the longest path in a directed acyclic graph.","link":"https://www.geeksforgeeks.org/longest-path-directed-acyclic-graph/","id":"q64"},{"topic":"Topological Sort","name":"Build a Matrix With Conditions","diff":"Hard","platform":"LeetCode","num":"2392","pattern":"Dual-axis topo sort","desc":"Build a matrix satisfying row and column ordering conditions.","link":"https://leetcode.com/problems/build-a-matrix-with-conditions/","id":"q65"},{"topic":"Topological Sort","name":"Course Schedule","diff":"Easy","platform":"CSES","num":"","pattern":"Topological order output","desc":"Find a valid course order or report impossibility.","link":"https://cses.fi/problemset/task/1679","id":"q66"},{"topic":"Topological Sort","name":"Game Routes","diff":"Medium","platform":"CSES","num":"","pattern":"Topo order + DP counting","desc":"Count number of distinct routes from level 1 to level n.","link":"https://cses.fi/problemset/task/1681","id":"q67"},{"topic":"DAG","name":"Longest Increasing Path in a Matrix","diff":"Hard","platform":"LeetCode","num":"329","pattern":"DAG DP (memoized DFS)","desc":"Find the longest strictly increasing path in a matrix.","link":"https://leetcode.com/problems/longest-increasing-path-in-a-matrix/","id":"q68"},{"topic":"DAG","name":"Shortest Path in DAG","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Topo sort + relaxation","desc":"Find shortest paths from a source in a weighted DAG.","link":"https://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/","id":"q69"},{"topic":"DAG","name":"Count All Possible Paths Between Two Vertices","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DAG DFS path counting","desc":"Count all paths between two vertices in a DAG.","link":"https://www.geeksforgeeks.org/count-possible-paths-two-vertices/","id":"q70"},{"topic":"DAG","name":"Longest Path With Different Adjacent Characters","diff":"Hard","platform":"LeetCode","num":"2246","pattern":"Tree DAG DP","desc":"Find longest path where adjacent nodes have different characters.","link":"https://leetcode.com/problems/longest-path-with-different-adjacent-characters/","id":"q71"},{"topic":"DAG","name":"Parallel Courses III","diff":"Hard","platform":"LeetCode","num":"2050","pattern":"Topo sort + DP on finish time","desc":"Find minimum time to complete all courses with durations.","link":"https://leetcode.com/problems/parallel-courses-iii/","id":"q72"},{"topic":"DAG","name":"Number of Ways to Arrive at Destination","diff":"Medium","platform":"LeetCode","num":"1976","pattern":"Dijkstra on DAG + counting","desc":"Count number of shortest paths from node 0 to n-1.","link":"https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/","id":"q73"},{"topic":"DAG","name":"Planets and Kingdoms","diff":"Medium","platform":"CSES","num":"","pattern":"SCC on functional graph","desc":"Find kingdoms (SCCs) formed by planet teleporters.","link":"https://cses.fi/problemset/task/1683","id":"q74"},{"topic":"DAG","name":"Coin Path","diff":"Hard","platform":"LeetCode","num":"656","pattern":"DAG shortest path DP","desc":"Find minimum-cost lexicographically smallest jump path.","link":"https://leetcode.com/problems/coin-path/","id":"q75"},{"topic":"Shortest Path (BFS)","name":"Shortest Path in Unweighted Graph","diff":"Easy","platform":"GeeksforGeeks","num":"","pattern":"Plain BFS distances","desc":"Find shortest path from source to all vertices in unweighted graph.","link":"https://www.geeksforgeeks.org/shortest-path-unweighted-graph/","id":"q76"},{"topic":"Shortest Path (BFS)","name":"Nearest Exit from Entrance in Maze","diff":"Medium","platform":"LeetCode","num":"1926","pattern":"Grid BFS to boundary","desc":"Find nearest exit from an entrance in a maze grid.","link":"https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/","id":"q77"},{"topic":"Shortest Path (BFS)","name":"Jump Game III","diff":"Medium","platform":"LeetCode","num":"1306","pattern":"BFS reachability on array graph","desc":"Determine if you can reach any index with value 0.","link":"https://leetcode.com/problems/jump-game-iii/","id":"q78"},{"topic":"Shortest Path (BFS)","name":"Minimum Genetic Mutation","diff":"Medium","platform":"LeetCode","num":"433","pattern":"BFS on mutation graph","desc":"Find minimum mutations to transform start gene to end gene.","link":"https://leetcode.com/problems/minimum-genetic-mutation/","id":"q79"},{"topic":"Shortest Path (BFS)","name":"Shortest Bridge","diff":"Medium","platform":"LeetCode","num":"934","pattern":"DFS mark + BFS expand","desc":"Find minimum flips to connect two islands.","link":"https://leetcode.com/problems/shortest-bridge/","id":"q80"},{"topic":"Shortest Path (BFS)","name":"Monsters","diff":"Hard","platform":"CSES","num":"","pattern":"Multi-source BFS escape","desc":"Determine if a player can escape a grid before monsters catch them.","link":"https://cses.fi/problemset/task/1194","id":"q81"},{"topic":"Shortest Path (BFS)","name":"As Far from Land as Possible","diff":"Medium","platform":"LeetCode","num":"1162","pattern":"Multi-source BFS max distance","desc":"Find water cell maximizing distance to nearest land.","link":"https://leetcode.com/problems/as-far-from-land-as-possible/","id":"q82"},{"topic":"Shortest Path (BFS)","name":"Sliding Puzzle","diff":"Hard","platform":"LeetCode","num":"773","pattern":"BFS on permutation state graph","desc":"Find minimum moves to solve a 2x3 sliding puzzle.","link":"https://leetcode.com/problems/sliding-puzzle/","id":"q83"},{"topic":"Multi-Source BFS","name":"Rotting Oranges","diff":"Medium","platform":"LeetCode","num":"994","pattern":"Multi-source BFS levels","desc":"Find minimum time for all fresh oranges to rot.","link":"https://leetcode.com/problems/rotting-oranges/","id":"q84"},{"topic":"Multi-Source BFS","name":"01 Matrix","diff":"Medium","platform":"LeetCode","num":"542","pattern":"Multi-source BFS distances","desc":"Find distance to the nearest 0 for each cell.","link":"https://leetcode.com/problems/01-matrix/","id":"q85"},{"topic":"Multi-Source BFS","name":"Walls and Gates","diff":"Medium","platform":"LeetCode","num":"286","pattern":"Multi-source BFS fill","desc":"Fill each empty room with distance to nearest gate.","link":"https://leetcode.com/problems/walls-and-gates/","id":"q86"},{"topic":"Multi-Source BFS","name":"As Far from Land as Possible","diff":"Medium","platform":"LeetCode","num":"1162","pattern":"Multi-source BFS max layer","desc":"Maximize distance from a water cell to the nearest land.","link":"https://leetcode.com/problems/as-far-from-land-as-possible/","id":"q87"},{"topic":"Multi-Source BFS","name":"Shortest Distance from All Buildings","diff":"Hard","platform":"LeetCode","num":"317","pattern":"Multi-source BFS accumulation","desc":"Find empty land minimizing total distance to all buildings.","link":"https://leetcode.com/problems/shortest-distance-from-all-buildings/","id":"q88"},{"topic":"Multi-Source BFS","name":"Map of Highest Peak","diff":"Medium","platform":"LeetCode","num":"1765","pattern":"Multi-source BFS height assignment","desc":"Assign heights maximizing the max height with water constraints.","link":"https://leetcode.com/problems/map-of-highest-peak/","id":"q89"},{"topic":"Multi-Source BFS","name":"Monsters","diff":"Hard","platform":"CSES","num":"","pattern":"Multi-source monster BFS","desc":"Compute monster arrival times from multiple sources.","link":"https://cses.fi/problemset/task/1194","id":"q90"},{"topic":"Multi-Source BFS","name":"Escape a Large Maze","diff":"Hard","platform":"LeetCode","num":"1036","pattern":"Bounded multi-frontier BFS","desc":"Determine if source can reach target avoiding blocked cells.","link":"https://leetcode.com/problems/escape-a-large-maze/","id":"q91"},{"topic":"0-1 BFS","name":"0-1 BFS Algorithm","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Deque-based 0-1 BFS","desc":"Find shortest path in a graph with only 0/1 edge weights.","link":"https://www.geeksforgeeks.org/0-1-bfs-shortest-path-binary-graph/","id":"q92"},{"topic":"0-1 BFS","name":"Minimum Cost to Make at Least One Valid Path in a Grid","diff":"Hard","platform":"LeetCode","num":"1368","pattern":"0-1 BFS on grid directions","desc":"Find minimum cost to have a valid path following signs.","link":"https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/","id":"q93"},{"topic":"0-1 BFS","name":"Obstacle Removal to Reach Corner","diff":"Hard","platform":"LeetCode","num":"1293","pattern":"0-1 BFS with state (eliminations)","desc":"Find shortest path removing at most k obstacles.","link":"https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/","id":"q94"},{"topic":"0-1 BFS","name":"Minimum Number of Days to Disconnect Island","diff":"Hard","platform":"LeetCode","num":"1568","pattern":"Graph theory + BFS","desc":"Find minimum days to disconnect an island into two parts.","link":"https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/","id":"q95"},{"topic":"0-1 BFS","name":"Modify Graph Edge Weights","diff":"Hard","platform":"LeetCode","num":"2699","pattern":"Dijkstra + weight adjustment","desc":"Modify -1 weighted edges to make shortest path equal target.","link":"https://leetcode.com/problems/modify-graph-edge-weights/","id":"q96"},{"topic":"0-1 BFS","name":"Weighted Job Scheduling on Grid","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"0-1 BFS grid pathing","desc":"Find minimum cost path with binary transition costs on grid.","link":"https://www.geeksforgeeks.org/0-1-bfs-shortest-path-binary-graph/","id":"q97"},{"topic":"0-1 BFS","name":"Zero One BFS Codeforces Style","diff":"Medium","platform":"Codeforces","num":"173B","pattern":"0-1 BFS shortest word ladder cost","desc":"Find min replacements to change one binary string to another via steps.","link":"https://codeforces.com/problemset/problem/173/B","id":"q98"},{"topic":"0-1 BFS","name":"Robot Room Cleaner Variant / Min Flips","diff":"Hard","platform":"LeetCode","num":"1284","pattern":"0-1 BFS on matrix states","desc":"Find minimum flips to convert matrix of 0s and 1s to all zero.","link":"https://leetcode.com/problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix/","id":"q99"},{"topic":"Dijkstra","name":"Network Delay Time","diff":"Medium","platform":"LeetCode","num":"743","pattern":"Dijkstra from single source","desc":"Find time for a signal to reach all nodes from source K.","link":"https://leetcode.com/problems/network-delay-time/","id":"q100"},{"topic":"Dijkstra","name":"Path With Minimum Effort","diff":"Medium","platform":"LeetCode","num":"1631","pattern":"Dijkstra with max-edge cost","desc":"Find path minimizing the maximum absolute height difference.","link":"https://leetcode.com/problems/path-with-minimum-effort/","id":"q101"},{"topic":"Dijkstra","name":"Cheapest Flights Within K Stops","diff":"Medium","platform":"LeetCode","num":"787","pattern":"Modified Dijkstra/Bellman-Ford","desc":"Find cheapest price from src to dst with at most K stops.","link":"https://leetcode.com/problems/cheapest-flights-within-k-stops/","id":"q102"},{"topic":"Dijkstra","name":"Path with Maximum Probability","diff":"Medium","platform":"LeetCode","num":"1514","pattern":"Dijkstra with product weights","desc":"Find path maximizing product of edge probabilities.","link":"https://leetcode.com/problems/path-with-maximum-probability/","id":"q103"},{"topic":"Dijkstra","name":"Swim in Rising Water","diff":"Hard","platform":"LeetCode","num":"778","pattern":"Dijkstra minimax on grid","desc":"Find minimum time to swim from top-left to bottom-right.","link":"https://leetcode.com/problems/swim-in-rising-water/","id":"q104"},{"topic":"Dijkstra","name":"Shortest Path Weight","diff":"Easy","platform":"GeeksforGeeks","num":"","pattern":"Classic Dijkstra","desc":"Find shortest distances from source using Dijkstra's algorithm.","link":"https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/","id":"q105"},{"topic":"Dijkstra","name":"Number of Ways to Arrive at Destination","diff":"Medium","platform":"LeetCode","num":"1976","pattern":"Dijkstra + path counting","desc":"Count number of shortest time paths to destination.","link":"https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/","id":"q106"},{"topic":"Dijkstra","name":"Find the City With the Smallest Number of Neighbors","diff":"Medium","platform":"LeetCode","num":"1334","pattern":"Dijkstra/Floyd-Warshall from each node","desc":"Find city with fewest reachable cities within threshold.","link":"https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/","id":"q107"},{"topic":"Dijkstra","name":"Flights","diff":"Medium","platform":"CSES","num":"","pattern":"Dijkstra shortest route","desc":"Find shortest flight route cost from city 1 to city n.","link":"https://cses.fi/problemset/task/1671","id":"q108"},{"topic":"Dijkstra","name":"Shortest Path Faster Algorithm Practice","diff":"Medium","platform":"SPOJ","num":"SHPATH","pattern":"Dijkstra / SPFA","desc":"Find the shortest path between two given nodes.","link":"https://www.spoj.com/problems/SHPATH/","id":"q109"},{"topic":"Dijkstra","name":"Second Minimum Time to Reach Destination","diff":"Hard","platform":"LeetCode","num":"2045","pattern":"Modified Dijkstra/BFS with 2nd shortest","desc":"Find second minimum time to reach the last node.","link":"https://leetcode.com/problems/second-minimum-time-to-reach-destination/","id":"q110"},{"topic":"Dijkstra","name":"Minimum Cost to Reach Destination in Time","diff":"Hard","platform":"LeetCode","num":"1928","pattern":"Constrained Dijkstra (time-bounded)","desc":"Find minimum cost path within a maximum time limit.","link":"https://leetcode.com/problems/minimum-cost-to-reach-destination-in-time/","id":"q111"},{"topic":"Dijkstra","name":"Dijkstra? Really?","diff":"Medium","platform":"Codeforces","num":"20C","pattern":"Dijkstra with path reconstruction","desc":"Find shortest path and reconstruct the actual route.","link":"https://codeforces.com/problemset/problem/20/C","id":"q112"},{"topic":"Dijkstra","name":"Roman Roads","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Dijkstra practical application","desc":"Find shortest travel routes across a road network.","link":"https://www.geeksforgeeks.org/dijkstras-algorithm-for-adjacency-list-representation-greedy-algo-8/","id":"q113"},{"topic":"Dijkstra","name":"Dinic Specialist / Shortest Path with Alternative Roads","diff":"Hard","platform":"AtCoder","num":"","pattern":"Dijkstra + counting alt shortest paths","desc":"Count edges that could be removed while keeping shortest distances.","link":"https://atcoder.jp/contests/abc192/tasks/abc192_e","id":"q114"},{"topic":"Bellman-Ford","name":"Bellman-Ford Algorithm","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Edge relaxation V-1 times","desc":"Find shortest paths from source, detecting negative cycles.","link":"https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/","id":"q115"},{"topic":"Bellman-Ford","name":"Cheapest Flights Within K Stops","diff":"Medium","platform":"LeetCode","num":"787","pattern":"Bounded Bellman-Ford relaxation","desc":"Find cheapest price within K stops using layered relaxation.","link":"https://leetcode.com/problems/cheapest-flights-within-k-stops/","id":"q116"},{"topic":"Bellman-Ford","name":"Negative Weight Cycle Detection","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Bellman-Ford extra relaxation check","desc":"Detect whether a graph contains a negative weight cycle.","link":"https://www.geeksforgeeks.org/detect-negative-cycle-graph-bellman-ford/","id":"q117"},{"topic":"Bellman-Ford","name":"High Score","diff":"Medium","platform":"CSES","num":"","pattern":"Bellman-Ford longest path w/ cycle","desc":"Find maximum score path detecting positive reachable cycles.","link":"https://cses.fi/problemset/task/1673","id":"q118"},{"topic":"Bellman-Ford","name":"Cycle Finding","diff":"Medium","platform":"CSES","num":"","pattern":"Bellman-Ford negative cycle detection","desc":"Detect and output a negative cycle if one exists.","link":"https://cses.fi/problemset/task/1197","id":"q119"},{"topic":"Bellman-Ford","name":"Negative Cycle","diff":"Medium","platform":"Codeforces","num":"852D","pattern":"Bellman-Ford + cycle extraction","desc":"Find and construct a negative cost cycle in a graph.","link":"https://codeforces.com/problemset/problem/852/D","id":"q120"},{"topic":"Bellman-Ford","name":"Distance Vector Routing Simulation","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Bellman-Ford applied to routing","desc":"Simulate distance-vector shortest path routing updates.","link":"https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/","id":"q121"},{"topic":"Bellman-Ford","name":"Arbitrage","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Bellman-Ford on log-weighted graph","desc":"Detect currency arbitrage opportunity using negative cycles.","link":"https://www.geeksforgeeks.org/detecting-negative-cycle-using-bellman-ford-algorithm/","id":"q122"},{"topic":"Bellman-Ford","name":"Frog Jump II style shortest with penalty","diff":"Medium","platform":"AtCoder","num":"","pattern":"Bellman-Ford styled DP relaxation","desc":"Find minimum cost sequence of jumps between stones.","link":"https://atcoder.jp/contests/dp/tasks/dp_a","id":"q123"},{"topic":"Bellman-Ford","name":"Wormhole Detection","diff":"Hard","platform":"SPOJ","num":"KATHTHI","pattern":"Bellman-Ford negative cycle","desc":"Determine if using a wormhole can create a negative time loop.","link":"https://www.spoj.com/problems/KATHTHI/","id":"q124"},{"topic":"Floyd-Warshall","name":"Floyd Warshall","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"All-pairs DP shortest path","desc":"Find shortest distances between all pairs of vertices.","link":"https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/","id":"q125"},{"topic":"Floyd-Warshall","name":"Find the City With the Smallest Number of Neighbors at a Threshold Distance","diff":"Medium","platform":"LeetCode","num":"1334","pattern":"Floyd-Warshall all-pairs","desc":"Find city with fewest cities reachable within threshold distance.","link":"https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/","id":"q126"},{"topic":"Floyd-Warshall","name":"Shortest Routes II","diff":"Medium","platform":"CSES","num":"","pattern":"Floyd-Warshall all-pairs queries","desc":"Answer multiple shortest path queries between city pairs.","link":"https://cses.fi/problemset/task/1672","id":"q127"},{"topic":"Floyd-Warshall","name":"Evaluate Division","diff":"Medium","platform":"LeetCode","num":"399","pattern":"Floyd-Warshall on ratio graph","desc":"Evaluate division queries given equations as a weighted graph.","link":"https://leetcode.com/problems/evaluate-division/","id":"q128"},{"topic":"Floyd-Warshall","name":"Course Schedule IV","diff":"Medium","platform":"LeetCode","num":"1462","pattern":"Floyd-Warshall reachability","desc":"Answer whether course A is a prerequisite of course B.","link":"https://leetcode.com/problems/course-schedule-iv/","id":"q129"},{"topic":"Floyd-Warshall","name":"Minimize Malware Spread II","diff":"Hard","platform":"LeetCode","num":"928","pattern":"Graph connectivity elimination","desc":"Find node to remove to minimize malware infection spread.","link":"https://leetcode.com/problems/minimize-malware-spread-ii/","id":"q130"},{"topic":"Floyd-Warshall","name":"Transitive Closure of a Graph","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Floyd-Warshall reachability matrix","desc":"Determine reachability between every pair of vertices.","link":"https://www.geeksforgeeks.org/transitive-closure-of-a-graph/","id":"q131"},{"topic":"Floyd-Warshall","name":"All Pairs Shortest Path","diff":"Medium","platform":"SPOJ","num":"MPILOT","pattern":"Floyd-Warshall variant","desc":"Compute best path metrics across all node pairs.","link":"https://www.spoj.com/problems/MPILOT/","id":"q132"},{"topic":"Johnson","name":"Johnson's Algorithm for All-Pairs Shortest Paths","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Bellman-Ford reweighting + Dijkstra","desc":"Compute all-pairs shortest paths in a sparse weighted graph.","link":"https://www.geeksforgeeks.org/johnsons-algorithm/","id":"q133"},{"topic":"Johnson","name":"All Pairs Shortest Paths (Johnson)","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Reweighting technique","desc":"Handle negative edges in all-pairs shortest path computation.","link":"https://www.geeksforgeeks.org/johnsons-algorithm-for-all-pairs-shortest-paths-implementation/","id":"q134"},{"topic":"Johnson","name":"High Score with Negative Edges Global","diff":"Hard","platform":"CSES","num":"","pattern":"Reweighting + relaxation","desc":"Solve shortest path queries where edge weights can be negative.","link":"https://cses.fi/problemset/task/1673","id":"q135"},{"topic":"Johnson","name":"Sparse All Pairs Shortest Path","diff":"Hard","platform":"Codeforces","num":"295B","pattern":"Johnson-style reweight + Dijkstra","desc":"Solve shortest path efficiently on a large sparse graph.","link":"https://codeforces.com/problemset/problem/295/B","id":"q136"},{"topic":"Johnson","name":"Currency Exchange Graph","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Johnson's algorithm application","desc":"Compute all pair best exchange rates avoiding negative cycles.","link":"https://www.geeksforgeeks.org/johnsons-algorithm/","id":"q137"},{"topic":"A*","name":"A* Search Algorithm","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Heuristic-guided search","desc":"Find shortest path from source to goal using A* heuristics.","link":"https://www.geeksforgeeks.org/a-search-algorithm/","id":"q138"},{"topic":"A*","name":"Sliding Puzzle","diff":"Hard","platform":"LeetCode","num":"773","pattern":"A*/BFS on state graph","desc":"Solve sliding puzzle with heuristic-guided state search.","link":"https://leetcode.com/problems/sliding-puzzle/","id":"q139"},{"topic":"A*","name":"Shortest Path in Binary Matrix","diff":"Medium","platform":"LeetCode","num":"1091","pattern":"A*/BFS with Chebyshev heuristic","desc":"Find shortest 8-directional path using heuristic search.","link":"https://leetcode.com/problems/shortest-path-in-binary-matrix/","id":"q140"},{"topic":"A*","name":"Path With Minimum Effort","diff":"Medium","platform":"LeetCode","num":"1631","pattern":"A*/Dijkstra minimax","desc":"Minimize maximum absolute difference along the path.","link":"https://leetcode.com/problems/path-with-minimum-effort/","id":"q141"},{"topic":"A*","name":"8 Puzzle Problem","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"A* with Manhattan distance heuristic","desc":"Solve the 8-puzzle using A* search with heuristics.","link":"https://www.geeksforgeeks.org/a-search-algorithm/","id":"q142"},{"topic":"DSU","name":"Number of Provinces","diff":"Medium","platform":"LeetCode","num":"547","pattern":"Union-Find components","desc":"Count number of provinces formed by direct/indirect connections.","link":"https://leetcode.com/problems/number-of-provinces/","id":"q143"},{"topic":"DSU","name":"Redundant Connection","diff":"Medium","platform":"LeetCode","num":"684","pattern":"Union-Find cycle edge","desc":"Find the edge that creates a cycle in the graph.","link":"https://leetcode.com/problems/redundant-connection/","id":"q144"},{"topic":"DSU","name":"Friend Circles","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Basic Union-Find","desc":"Count friend circles formed among students.","link":"https://www.geeksforgeeks.org/union-find/","id":"q145"},{"topic":"DSU","name":"Number of Islands II","diff":"Hard","platform":"LeetCode","num":"305","pattern":"Dynamic Union-Find (online)","desc":"Count islands after each land addition in an online fashion.","link":"https://leetcode.com/problems/number-of-islands-ii/","id":"q146"},{"topic":"DSU","name":"Accounts Merge","diff":"Medium","platform":"LeetCode","num":"721","pattern":"Union-Find on emails","desc":"Merge accounts belonging to the same person via shared emails.","link":"https://leetcode.com/problems/accounts-merge/","id":"q147"},{"topic":"DSU","name":"Most Stones Removed with Same Row or Column","diff":"Medium","platform":"LeetCode","num":"947","pattern":"Union-Find row/col merging","desc":"Find maximum stones removable given row/column constraints.","link":"https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/","id":"q148"},{"topic":"DSU","name":"Satisfiability of Equality Equations","diff":"Medium","platform":"LeetCode","num":"990","pattern":"Union-Find with equality/inequality","desc":"Determine if a set of equality/inequality equations is satisfiable.","link":"https://leetcode.com/problems/satisfiability-of-equality-equations/","id":"q149"},{"topic":"DSU","name":"Redundant Connection II","diff":"Hard","platform":"LeetCode","num":"685","pattern":"Union-Find with parent tracking","desc":"Find the removable edge in a directed rooted tree with extra edge.","link":"https://leetcode.com/problems/redundant-connection-ii/","id":"q150"},{"topic":"DSU","name":"Regions Cut By Slashes","diff":"Medium","platform":"LeetCode","num":"959","pattern":"Union-Find on subdivided cells","desc":"Count regions formed by diagonal cuts in a grid.","link":"https://leetcode.com/problems/regions-cut-by-slashes/","id":"q151"},{"topic":"DSU","name":"Swim in Rising Water","diff":"Hard","platform":"LeetCode","num":"778","pattern":"Union-Find + sorted edges","desc":"Find minimum time to swim across using incremental union.","link":"https://leetcode.com/problems/swim-in-rising-water/","id":"q152"},{"topic":"DSU","name":"Path with Maximum Minimum Value","diff":"Medium","platform":"LeetCode","num":"1102","pattern":"Union-Find sorted by value","desc":"Find path maximizing the minimum value along the way.","link":"https://leetcode.com/problems/path-with-maximum-minimum-value/","id":"q153"},{"topic":"DSU","name":"Smallest String With Swaps","diff":"Medium","platform":"LeetCode","num":"1202","pattern":"Union-Find on swappable indices","desc":"Find lexicographically smallest string using allowed swaps.","link":"https://leetcode.com/problems/smallest-string-with-swaps/","id":"q154"},{"topic":"DSU","name":"Evaluate Division","diff":"Medium","platform":"LeetCode","num":"399","pattern":"Weighted Union-Find","desc":"Evaluate division queries using a weighted DSU approach.","link":"https://leetcode.com/problems/evaluate-division/","id":"q155"},{"topic":"DSU","name":"Number of Operations to Make Network Connected","diff":"Medium","platform":"LeetCode","num":"1319","pattern":"Union-Find + redundant edge count","desc":"Find minimum operations to connect all computers in a network.","link":"https://leetcode.com/problems/number-of-operations-to-make-network-connected/","id":"q156"},{"topic":"DSU","name":"Bricks Falling When Hit","diff":"Hard","platform":"LeetCode","num":"803","pattern":"Reverse Union-Find","desc":"Simulate brick removal in reverse using union-find.","link":"https://leetcode.com/problems/bricks-falling-when-hit/","id":"q157"},{"topic":"DSU","name":"Minimize Malware Spread","diff":"Hard","platform":"LeetCode","num":"924","pattern":"Union-Find + component sizing","desc":"Find node to remove minimizing malware spread across network.","link":"https://leetcode.com/problems/minimize-malware-spread/","id":"q158"},{"topic":"DSU","name":"Road Construction","diff":"Medium","platform":"CSES","num":"","pattern":"Union-Find live component tracking","desc":"Track number of components and largest size dynamically.","link":"https://cses.fi/problemset/task/1676","id":"q159"},{"topic":"DSU","name":"Union-Find Disjoint Sets","diff":"Easy","platform":"HackerRank","num":"","pattern":"Basic DSU operations","desc":"Implement union-find with union and find queries.","link":"https://www.hackerrank.com/challenges/merging-communities","id":"q160"},{"topic":"DSU","name":"Journey to the Moon","diff":"Medium","platform":"HackerRank","num":"","pattern":"Union-Find country grouping","desc":"Count pairs of astronauts from different countries.","link":"https://www.hackerrank.com/challenges/journey-to-the-moon","id":"q161"},{"topic":"DSU","name":"Similar String Groups","diff":"Hard","platform":"LeetCode","num":"839","pattern":"Union-Find on string similarity","desc":"Count groups of similar strings using union-find merging.","link":"https://leetcode.com/problems/similar-string-groups/","id":"q162"},{"topic":"MST","name":"Minimum Spanning Tree","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"MST general concept","desc":"Find the minimum spanning tree of a weighted graph.","link":"https://www.geeksforgeeks.org/minimum-spanning-tree/","id":"q163"},{"topic":"MST","name":"Min Cost to Connect All Points","diff":"Medium","platform":"LeetCode","num":"1584","pattern":"MST (Prim's/Kruskal's)","desc":"Find minimum cost to connect all points using Manhattan distance.","link":"https://leetcode.com/problems/min-cost-to-connect-all-points/","id":"q164"},{"topic":"MST","name":"Connecting Cities With Minimum Cost","diff":"Medium","platform":"LeetCode","num":"1135","pattern":"MST on given edges","desc":"Find minimum cost to connect all cities.","link":"https://leetcode.com/problems/connecting-cities-with-minimum-cost/","id":"q165"},{"topic":"MST","name":"Road Reparation","diff":"Medium","platform":"CSES","num":"","pattern":"MST with connectivity check","desc":"Find minimum cost to repair roads connecting all cities.","link":"https://cses.fi/problemset/task/1675","id":"q166"},{"topic":"MST","name":"Optimize Water Distribution in a Village","diff":"Hard","platform":"LeetCode","num":"1168","pattern":"MST with virtual source node","desc":"Minimize cost to supply water using wells and pipes as MST.","link":"https://leetcode.com/problems/optimize-water-distribution-in-a-village/","id":"q167"},{"topic":"MST","name":"Minimum Cost to Make at Least One Valid Path","diff":"Hard","platform":"LeetCode","num":"1368","pattern":"MST-adjacent 0/1 weighted graph","desc":"Find minimum cost to make a path valid using signs.","link":"https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/","id":"q168"},{"topic":"MST","name":"Find Critical and Pseudo-Critical Edges in MST","diff":"Hard","platform":"LeetCode","num":"1489","pattern":"MST + edge inclusion/exclusion","desc":"Classify edges as critical or pseudo-critical for MST weight.","link":"https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/","id":"q169"},{"topic":"MST","name":"Building Roads Minimum Spanning Style","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Prim's/Kruskal's application","desc":"Connect all villages using minimum total road length.","link":"https://www.geeksforgeeks.org/applications-of-minimum-spanning-tree/","id":"q170"},{"topic":"MST","name":"Minimum Spanning Tree Sum","diff":"Medium","platform":"SPOJ","num":"MST","pattern":"Kruskal's MST sum","desc":"Compute the total weight of the minimum spanning tree.","link":"https://www.spoj.com/problems/MST/","id":"q171"},{"topic":"MST","name":"Network Delay with Cost Cap","diff":"Medium","platform":"Codeforces","num":"1108F","pattern":"MST variant with min cost","desc":"Build spanning structure respecting minimum cost constraints.","link":"https://codeforces.com/problemset/problem/1108/F","id":"q172"},{"topic":"MST","name":"Second Best MST","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"MST + alternate edge swap","desc":"Find the second minimum spanning tree of a graph.","link":"https://www.geeksforgeeks.org/second-minimum-spanning-tree-using-kruskals-and-lca/","id":"q173"},{"topic":"MST","name":"Otoshidama","diff":"Medium","platform":"AtCoder","num":"","pattern":"MST-adjacent constrained sum","desc":"Determine feasibility of monetary total under constraints.","link":"https://atcoder.jp/contests/abc085/tasks/abc085_c","id":"q174"},{"topic":"MST","name":"Sink!","diff":"Medium","platform":"HackerRank","num":"","pattern":"MST on grid graph","desc":"Find minimum cost tree structure across a grid of nodes.","link":"https://www.hackerrank.com/challenges/kingdom-connectivity","id":"q175"},{"topic":"MST","name":"Feed the Cows / Cheapest Network","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"MST practical layout","desc":"Design cheapest network layout connecting all farms.","link":"https://www.geeksforgeeks.org/applications-of-minimum-spanning-tree/","id":"q176"},{"topic":"MST","name":"Min Cost to Connect All Points (Variant)","diff":"Hard","platform":"Codeforces","num":"609E","pattern":"MST + tree DP for min bottleneck","desc":"Build MST-based tree minimizing max edge with vertex constraint.","link":"https://codeforces.com/problemset/problem/609/E","id":"q177"},{"topic":"Prim","name":"Prim's Algorithm","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Prim's MST with priority queue","desc":"Build the MST by growing from a single starting vertex.","link":"https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/","id":"q178"},{"topic":"Prim","name":"Min Cost to Connect All Points","diff":"Medium","platform":"LeetCode","num":"1584","pattern":"Prim's Algorithm","desc":"Connect all points minimizing total Manhattan cost.","link":"https://leetcode.com/problems/min-cost-to-connect-all-points/","id":"q179"},{"topic":"Prim","name":"Road Reparation","diff":"Medium","platform":"CSES","num":"","pattern":"Prim's MST","desc":"Compute minimum spanning tree cost using Prim's approach.","link":"https://cses.fi/problemset/task/1675","id":"q180"},{"topic":"Prim","name":"Jungle Roads","diff":"Medium","platform":"SPOJ","num":"JUNGLE","pattern":"Prim's Algorithm on adjacency matrix","desc":"Find minimum cost to maintain roads connecting all villages.","link":"https://www.spoj.com/problems/JUNGLE/","id":"q181"},{"topic":"Prim","name":"MST Priority Queue Optimization","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Prim's with binary heap","desc":"Optimize Prim's algorithm using a min-heap for dense graphs.","link":"https://www.geeksforgeeks.org/prims-mst-for-adjacency-list-representation-greedy-algo-6/","id":"q182"},{"topic":"Prim","name":"Network Cabling","diff":"Medium","platform":"HackerRank","num":"","pattern":"Prim's Algorithm application","desc":"Find minimum cable length to connect all network nodes.","link":"https://www.hackerrank.com/challenges/kingdom-connectivity","id":"q183"},{"topic":"Prim","name":"Full Tank?","diff":"Hard","platform":"Codeforces","num":"","platform2":"","pattern":"Prim/Dijkstra hybrid MST-shortest path","desc":"Combine fuel state and MST-style graph traversal for min cost.","link":"https://codeforces.com/gym/101047","id":"q184"},{"topic":"Prim","name":"Minimum Spanning Tree Basic","diff":"Easy","platform":"GeeksforGeeks","num":"","pattern":"Prim's on small graphs","desc":"Practice building MST using Prim's approach on sample graphs.","link":"https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/","id":"q185"},{"topic":"Prim","name":"Agri-Net","diff":"Easy","platform":"SPOJ","num":"AGRINET","pattern":"Prim's Algorithm classic","desc":"Find minimum length of cable needed to connect all farms.","link":"https://www.spoj.com/problems/AGRINET/","id":"q186"},{"topic":"Prim","name":"Optimize Water Distribution in a Village","diff":"Hard","platform":"LeetCode","num":"1168","pattern":"Prim's with virtual node","desc":"Minimize total cost using Prim's on augmented graph.","link":"https://leetcode.com/problems/optimize-water-distribution-in-a-village/","id":"q187"},{"topic":"Kruskal","name":"Kruskal's Algorithm","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Sort edges + Union-Find","desc":"Build MST by adding cheapest non-cycle-forming edges.","link":"https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/","id":"q188"},{"topic":"Kruskal","name":"Connecting Cities With Minimum Cost","diff":"Medium","platform":"LeetCode","num":"1135","pattern":"Kruskal's Algorithm","desc":"Connect all cities with minimum total connection cost.","link":"https://leetcode.com/problems/connecting-cities-with-minimum-cost/","id":"q189"},{"topic":"Kruskal","name":"Road Reparation","diff":"Medium","platform":"CSES","num":"","pattern":"Kruskal's MST","desc":"Find minimum total road repair cost connecting all cities.","link":"https://cses.fi/problemset/task/1675","id":"q190"},{"topic":"Kruskal","name":"Find Critical and Pseudo-Critical Edges in MST","diff":"Hard","platform":"LeetCode","num":"1489","pattern":"Kruskal's + edge exclusion/inclusion","desc":"Determine which edges are critical or pseudo-critical to MST.","link":"https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/","id":"q191"},{"topic":"Kruskal","name":"Agri-Net","diff":"Easy","platform":"SPOJ","num":"AGRINET","pattern":"Kruskal's Algorithm classic","desc":"Compute minimum length of cable needed using Kruskal's approach.","link":"https://www.spoj.com/problems/AGRINET/","id":"q192"},{"topic":"Kruskal","name":"Minimum Spanning Tree Sum","diff":"Medium","platform":"SPOJ","num":"MST","pattern":"Kruskal's sorted edge processing","desc":"Compute total MST weight using sorted edge selection.","link":"https://www.spoj.com/problems/MST/","id":"q193"},{"topic":"Kruskal","name":"Number of Operations to Make Network Connected","diff":"Medium","platform":"LeetCode","num":"1319","pattern":"Kruskal-style redundant edge counting","desc":"Find minimum operations to connect all computers using cables.","link":"https://leetcode.com/problems/number-of-operations-to-make-network-connected/","id":"q194"},{"topic":"Kruskal","name":"Min Cost to Connect All Points","diff":"Medium","platform":"LeetCode","num":"1584","pattern":"Kruskal's Algorithm","desc":"Connect all points using Kruskal's with sorted distance edges.","link":"https://leetcode.com/problems/min-cost-to-connect-all-points/","id":"q195"},{"topic":"Kruskal","name":"Frog 3 style MST edges","diff":"Medium","platform":"AtCoder","num":"","pattern":"Kruskal's with custom edge weights","desc":"Build MST from custom-weighted edges between stones.","link":"https://atcoder.jp/contests/dp/tasks/dp_z","id":"q196"},{"topic":"Kruskal","name":"Building a Nice Neighborhood alt MST","diff":"Medium","platform":"Codeforces","num":"1220E","pattern":"Kruskal reconstruction technique","desc":"Use Kruskal reconstruction tree to answer queries efficiently.","link":"https://codeforces.com/problemset/problem/1220/E","id":"q197"},{"topic":"Kruskal","name":"Truck History","diff":"Medium","platform":"SPOJ","num":"TRUCKHIST","pattern":"Kruskal's MST minimizing max edge","desc":"Find a spanning tree minimizing the maximum edit distance edge.","link":"https://www.spoj.com/problems/TRUCKHIST/","id":"q198"},{"topic":"Kruskal","name":"Fence","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Kruskal's Algorithm application","desc":"Find minimum cost to build fences connecting all posts.","link":"https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/","id":"q199"},{"topic":"Bridges","name":"Critical Connections in a Network","diff":"Hard","platform":"LeetCode","num":"1192","pattern":"Tarjan's Bridge-finding","desc":"Find all bridges (critical connections) in a network graph.","link":"https://leetcode.com/problems/critical-connections-in-a-network/","id":"q200"},{"topic":"Bridges","name":"Bridges in a Graph","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS + low-link values","desc":"Find all bridge edges in an undirected connected graph.","link":"https://www.geeksforgeeks.org/bridge-in-a-graph/","id":"q201"},{"topic":"Bridges","name":"Bridges","diff":"Medium","platform":"CSES","num":"","pattern":"Bridge-finding algorithm","desc":"Find all bridges in a given undirected graph.","link":"https://cses.fi/problemset/task/1705","id":"q202"},{"topic":"Bridges","name":"Critical Edges Codeforces","diff":"Hard","platform":"Codeforces","num":"732F","pattern":"Bridge tree + weighted MST edges","desc":"Determine which edges are critical, pseudo-critical, or useless.","link":"https://codeforces.com/problemset/problem/732/F","id":"q203"},{"topic":"Bridges","name":"Road Trip Bridges","diff":"Medium","platform":"HackerRank","num":"","pattern":"Bridge-finding on road network","desc":"Identify roads whose removal disconnects the network.","link":"https://www.hackerrank.com/challenges/torque-and-development","id":"q204"},{"topic":"Bridges","name":"Fully Online Bridge Detection","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Dynamic bridge detection","desc":"Detect bridges dynamically as edges are added to a graph.","link":"https://www.geeksforgeeks.org/bridge-in-a-graph/","id":"q205"},{"topic":"Bridges","name":"Network Reliability","diff":"Hard","platform":"AtCoder","num":"","pattern":"Bridge finding + reliability check","desc":"Determine network segments vulnerable to single edge failure.","link":"https://atcoder.jp/contests/abc075/tasks/abc075_c","id":"q206"},{"topic":"Bridges","name":"Torque and Development","diff":"Hard","platform":"HackerRank","num":"","pattern":"Bridges + tree DP","desc":"Find optimal bridge placement to maximize network connectivity.","link":"https://www.hackerrank.com/challenges/torque-and-development","id":"q207"},{"topic":"Bridges","name":"Critical Links","diff":"Medium","platform":"SPOJ","num":"SUBMERGE","pattern":"Bridge-finding classic","desc":"Find all critical links in a computer network topology.","link":"https://www.spoj.com/problems/SUBMERGE/","id":"q208"},{"topic":"Bridges","name":"Building Bridges Between Islands","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Bridge + component analysis","desc":"Determine bridges whose removal isolates island groups.","link":"https://www.geeksforgeeks.org/bridge-in-a-graph/","id":"q209"},{"topic":"Articulation Points","name":"Articulation Points (or Cut Vertices)","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS + low-link cut vertex","desc":"Find all cut vertices whose removal disconnects the graph.","link":"https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/","id":"q210"},{"topic":"Articulation Points","name":"Critical Routers","diff":"Medium","platform":"HackerRank","num":"","pattern":"Articulation point detection","desc":"Identify critical routers whose failure disconnects a network.","link":"https://www.hackerrank.com/challenges/torque-and-development","id":"q211"},{"topic":"Articulation Points","name":"Cut Vertex / Articulation Point","diff":"Medium","platform":"Codeforces","num":"1000E","pattern":"Articulation points + bridge tree","desc":"Combine articulation point detection with tree construction.","link":"https://codeforces.com/problemset/problem/1000/E","id":"q212"},{"topic":"Articulation Points","name":"Network","diff":"Medium","platform":"SPOJ","num":"NETWORK","pattern":"Articulation point classic","desc":"Find critical stations whose failure splits the network.","link":"https://www.spoj.com/problems/NETWORK/","id":"q213"},{"topic":"Articulation Points","name":"Vital Bridges","diff":"Medium","platform":"AtCoder","num":"","pattern":"Articulation + bridge combined","desc":"Determine vital nodes and edges maintaining connectivity.","link":"https://atcoder.jp/contests/abc075/tasks/abc075_c","id":"q214"},{"topic":"Articulation Points","name":"Cut Vertex Counting","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS articulation point counting","desc":"Count number of articulation points in an undirected graph.","link":"https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/","id":"q215"},{"topic":"Articulation Points","name":"Warfare","diff":"Hard","platform":"SPOJ","num":"WARFARE","pattern":"Articulation points strategy","desc":"Identify strategically critical junctions in a war network.","link":"https://www.spoj.com/problems/WARFARE/","id":"q216"},{"topic":"Articulation Points","name":"Critical Nodes in Communication Graph","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Articulation point application","desc":"Find nodes critical to keeping communication graph connected.","link":"https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/","id":"q217"},{"topic":"Articulation Points","name":"Road Networks","diff":"Hard","platform":"Codeforces","num":"1000F","pattern":"Articulation points + queries","desc":"Answer connectivity queries after articulation point removal.","link":"https://codeforces.com/problemset/problem/1000/F","id":"q218"},{"topic":"Articulation Points","name":"Fail-Safe Network","diff":"Hard","platform":"HackerRank","num":"","pattern":"Articulation points redundancy","desc":"Design fail-safe network avoiding single point of failure.","link":"https://www.hackerrank.com/challenges/torque-and-development","id":"q219"},{"topic":"Biconnected Components","name":"Biconnected Components","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"DFS stack-based BCC","desc":"Find all biconnected components of an undirected graph.","link":"https://www.geeksforgeeks.org/biconnected-components/","id":"q220"},{"topic":"Biconnected Components","name":"Is a given graph Biconnected?","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Articulation point absence check","desc":"Check whether a graph is biconnected (no cut vertices).","link":"https://www.geeksforgeeks.org/biconnectivity-in-a-graph/","id":"q221"},{"topic":"Biconnected Components","name":"Block-Cut Tree Construction","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"BCC + block-cut tree","desc":"Construct the block-cut tree from biconnected components.","link":"https://www.geeksforgeeks.org/biconnected-components/","id":"q222"},{"topic":"Biconnected Components","name":"Bridges and Articulation Points Combined","diff":"Hard","platform":"Codeforces","num":"1000E","pattern":"Combined BCC analysis","desc":"Analyze graph structure using both bridges and BCCs.","link":"https://codeforces.com/problemset/problem/1000/E","id":"q223"},{"topic":"Biconnected Components","name":"Vertex Biconnectivity Query","diff":"Hard","platform":"AtCoder","num":"","pattern":"BCC + LCA on block-cut tree","desc":"Answer biconnectivity queries between vertex pairs.","link":"https://atcoder.jp/contests/abc075/tasks/abc075_c","id":"q224"},{"topic":"Biconnected Components","name":"Redundant Paths","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"BCC for redundancy","desc":"Determine minimum edges to add for full biconnectivity.","link":"https://www.geeksforgeeks.org/biconnected-components/","id":"q225"},{"topic":"Biconnected Components","name":"ACM ICPC BCC Challenge","diff":"Hard","platform":"SPOJ","num":"BCC","pattern":"Classic BCC decomposition","desc":"Decompose graph into biconnected components with counts.","link":"https://www.spoj.com/problems/BCC/","id":"q226"},{"topic":"Biconnected Components","name":"Network Vulnerability Analysis","diff":"Hard","platform":"HackerRank","num":"","pattern":"BCC network resilience","desc":"Analyze network resilience using biconnected component structure.","link":"https://www.hackerrank.com/challenges/torque-and-development","id":"q227"},{"topic":"Kosaraju","name":"Strongly Connected Components (Kosaraju's Algo)","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Two-pass DFS + transpose graph","desc":"Find all strongly connected components using Kosaraju's algorithm.","link":"https://www.geeksforgeeks.org/strongly-connected-components/","id":"q228"},{"topic":"Kosaraju","name":"Strongly Connected Component (SCC)","diff":"Medium","platform":"CSES","num":"","pattern":"Kosaraju's Algorithm","desc":"Count and identify SCCs in a directed graph.","link":"https://cses.fi/problemset/task/1684","id":"q229"},{"topic":"Kosaraju","name":"Number of SCCs","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Kosaraju's SCC counting","desc":"Count the total number of strongly connected components.","link":"https://www.geeksforgeeks.org/strongly-connected-components/","id":"q230"},{"topic":"Kosaraju","name":"Mother Vertex","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"DFS finish order + SCC concept","desc":"Find a mother vertex that can reach all other vertices.","link":"https://www.geeksforgeeks.org/find-a-mother-vertex-in-a-graph/","id":"q231"},{"topic":"Kosaraju","name":"Strongly Connected Cities","diff":"Medium","platform":"HackerRank","num":"","pattern":"Kosaraju's on city graph","desc":"Group cities into strongly connected regions.","link":"https://www.hackerrank.com/challenges/strongly-connected-cities","id":"q232"},{"topic":"Kosaraju","name":"Checking Strong Connectivity","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"SCC single-component check","desc":"Check if the entire directed graph is strongly connected.","link":"https://www.geeksforgeeks.org/connectivity-in-a-directed-graph/","id":"q233"},{"topic":"Kosaraju","name":"Give Me the Answer","diff":"Hard","platform":"SPOJ","num":"GIVEAWAY","pattern":"SCC + 2-SAT style reasoning","desc":"Solve constraint satisfaction using SCC decomposition.","link":"https://www.spoj.com/problems/GIVEAWAY/","id":"q234"},{"topic":"Kosaraju","name":"Strongly Connected Component Codeforces","diff":"Medium","platform":"Codeforces","num":"999E","pattern":"Kosaraju's + condensation graph","desc":"Find minimum edges to make graph strongly connected.","link":"https://codeforces.com/problemset/problem/999/E","id":"q235"},{"topic":"Tarjan","name":"Strongly Connected Components (Tarjan's Algo)","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Single-pass DFS + low-link SCC","desc":"Find all SCCs using Tarjan's single-pass DFS algorithm.","link":"https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/","id":"q236"},{"topic":"Tarjan","name":"Critical Connections in a Network","diff":"Hard","platform":"LeetCode","num":"1192","pattern":"Tarjan's low-link bridges","desc":"Find bridges in a network using Tarjan's low-link technique.","link":"https://leetcode.com/problems/critical-connections-in-a-network/","id":"q237"},{"topic":"Tarjan","name":"Flight Routes Check","diff":"Medium","platform":"CSES","num":"","pattern":"Tarjan's SCC + condensation","desc":"Check if all cities are reachable from and to city 1.","link":"https://cses.fi/problemset/task/1682","id":"q238"},{"topic":"Tarjan","name":"Coin Collector","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Tarjan's SCC + DAG DP","desc":"Maximize coin collection using SCC condensation and DP.","link":"https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/","id":"q239"},{"topic":"Tarjan","name":"Strongly Connected Components Codeforces","diff":"Hard","platform":"Codeforces","num":"427C","pattern":"Tarjan's + condensation graph DP","desc":"Find minimum operations to make a graph strongly connected.","link":"https://codeforces.com/problemset/problem/427/C","id":"q240"},{"topic":"Tarjan","name":"Checking Contest","diff":"Medium","platform":"AtCoder","num":"","pattern":"Tarjan's SCC application","desc":"Determine strongly connected regions in a contest graph.","link":"https://atcoder.jp/contests/abc075/tasks/abc075_c","id":"q241"},{"topic":"Tarjan","name":"Popular Cows","diff":"Medium","platform":"GeeksforGeeks","num":"","pattern":"Tarjan's SCC + sink condensation","desc":"Find number of cows considered popular by all others.","link":"https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/","id":"q242"},{"topic":"Tarjan","name":"2-SAT Problem","diff":"Hard","platform":"GeeksforGeeks","num":"","pattern":"Tarjan's SCC for 2-SAT solving","desc":"Solve boolean satisfiability using implication graph SCCs.","link":"https://www.geeksforgeeks.org/2-sat-problem/","id":"q243"},{"topic":"Tarjan","name":"Codeforces Good Bye SCC","diff":"Hard","platform":"Codeforces","num":"22E","pattern":"Tarjan's + graph condensation cost","desc":"Minimize cost to make graph strongly connected via condensation.","link":"https://codeforces.com/problemset/problem/22/E","id":"q244"},{"topic":"Tarjan","name":"Network of Schools","diff":"Hard","platform":"SPOJ","num":"NETWORKOFSCHOOLS","pattern":"Tarjan's SCC + source/sink counting","desc":"Find minimum schools to send software to reach all others.","link":"https://www.spoj.com/problems/NETWORKOFSCHOOLS/","id":"q245"}];
+</script>
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "graphSheetProgress_v1";
+  const NOTES_KEY = "graphSheetNotes_v1";
+  const COLLAPSE_KEY = "graphSheetCollapse_v1";
+
+  // Order topics logically: basic -> advanced (matches the requested progression)
+  const TOPIC_ORDER = [
+    "Graph Representation","BFS","DFS","Connected Components","Cycle Detection",
+    "Bipartite","Topological Sort","DAG","Shortest Path (BFS)","Multi-Source BFS",
+    "0-1 BFS","Dijkstra","Bellman-Ford","Floyd-Warshall","Johnson","A*",
+    "DSU","MST","Prim","Kruskal","Bridges","Articulation Points",
+    "Biconnected Components","Kosaraju","Tarjan"
+  ];
+
+  const ADVANCED_TOPICS = new Set([
+    "Bridges","Articulation Points","Biconnected Components","Kosaraju","Tarjan",
+    "Johnson","0-1 BFS","A*"
+  ]);
+
+  let solved = loadJSON(STORAGE_KEY, {});
+  let notes = loadJSON(NOTES_KEY, {});
+  let collapsed = loadJSON(COLLAPSE_KEY, {});
+
+  let filters = { search:"", topic:"all", diff:"all", platform:"all", status:"all" };
+
+  function loadJSON(key, fallback){
+    try{
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    }catch(e){ return fallback; }
+  }
+  function saveJSON(key, obj){
+    try{ localStorage.setItem(key, JSON.stringify(obj)); }catch(e){}
+  }
+
+  function groupByTopic(list){
+    const map = {};
+    list.forEach(q=>{
+      if(!map[q.topic]) map[q.topic] = [];
+      map[q.topic].push(q);
+    });
+    return map;
+  }
+
+  function populateFilterOptions(){
+    const topicSel = document.getElementById("topicFilter");
+    const platformSel = document.getElementById("platformFilter");
+
+    const topics = [...new Set(QUESTIONS.map(q=>q.topic))]
+      .sort((a,b)=> TOPIC_ORDER.indexOf(a) - TOPIC_ORDER.indexOf(b));
+    topics.forEach(t=>{
+      const opt = document.createElement("option");
+      opt.value = t; opt.textContent = t;
+      topicSel.appendChild(opt);
+    });
+
+    const platforms = [...new Set(QUESTIONS.map(q=>q.platform))].sort();
+    platforms.forEach(p=>{
+      const opt = document.createElement("option");
+      opt.value = p; opt.textContent = p;
+      platformSel.appendChild(opt);
+    });
+  }
+
+  function matchesFilters(q){
+    if(filters.topic !== "all" && q.topic !== filters.topic) return false;
+    if(filters.diff !== "all" && q.diff !== filters.diff) return false;
+    if(filters.platform !== "all" && q.platform !== filters.platform) return false;
+    if(filters.status === "solved" && !solved[q.id]) return false;
+    if(filters.status === "unsolved" && solved[q.id]) return false;
+    if(filters.search){
+      const hay = (q.name+" "+q.pattern+" "+q.platform+" "+q.desc+" "+q.topic).toLowerCase();
+      if(!hay.includes(filters.search.toLowerCase())) return false;
+    }
+    return true;
+  }
+
+  function diffPillHTML(diff){
+    const cls = diff.toLowerCase();
+    return `<span class="pill ${cls}">${diff}</span>`;
+  }
+
+  function renderContent(){
+    const content = document.getElementById("content");
+    content.innerHTML = "";
+
+    const filtered = QUESTIONS.filter(matchesFilters);
+    const grouped = groupByTopic(filtered);
+
+    const topicsToShow = TOPIC_ORDER.filter(t => grouped[t] && grouped[t].length);
+
+    if(topicsToShow.length === 0){
+      content.innerHTML = `<div class="empty-state"><h3>No questions match your filters</h3><p>Try clearing search or filters.</p></div>`;
+      return;
+    }
+
+    topicsToShow.forEach(topic=>{
+      const qs = grouped[topic];
+      const allTopicQs = QUESTIONS.filter(q=>q.topic===topic);
+      const solvedCount = allTopicQs.filter(q=>solved[q.id]).length;
+      const pct = Math.round((solvedCount/allTopicQs.length)*100);
+
+      const section = document.createElement("div");
+      section.className = "topic-section" + (collapsed[topic] ? " collapsed" : "");
+      section.dataset.topic = topic;
+
+      const diffCounts = {Easy:0,Medium:0,Hard:0};
+      allTopicQs.forEach(q=> diffCounts[q.diff]++);
+
+      section.innerHTML = `
+        <div class="topic-header">
+          <div class="topic-header-left">
+            <div class="topic-chevron">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="topic-name">${topic}</div>
+              <div class="topic-count">${allTopicQs.length} problems</div>
+            </div>
+          </div>
+          <div class="diff-pills">
+            ${diffCounts.Easy? diffPillHTML("Easy").replace(">Easy",">"+diffCounts.Easy+" Easy"):""}
+            ${diffCounts.Medium? diffPillHTML("Medium").replace(">Medium",">"+diffCounts.Medium+" Med"):""}
+            ${diffCounts.Hard? diffPillHTML("Hard").replace(">Hard",">"+diffCounts.Hard+" Hard"):""}
+          </div>
+          <div class="topic-progress-mini">
+            <div class="topic-bar-track"><div class="topic-bar-fill" style="width:${pct}%"></div></div>
+            <div class="topic-progress-text">${solvedCount}/${allTopicQs.length}</div>
+          </div>
+        </div>
+        <div class="topic-body">
+          <div class="q-table-head">
+            <span></span><span>Problem</span><span>Difficulty</span><span>Platform</span><span>Pattern</span><span>Notes</span>
+          </div>
+          <div class="q-rows"></div>
+        </div>
+      `;
+
+      const rowsWrap = section.querySelector(".q-rows");
+      qs.forEach(q=>{
+        rowsWrap.appendChild(buildRow(q));
+      });
+
+      section.querySelector(".topic-header").addEventListener("click", ()=>{
+        const isCollapsed = section.classList.toggle("collapsed");
+        collapsed[topic] = isCollapsed;
+        saveJSON(COLLAPSE_KEY, collapsed);
+      });
+
+      content.appendChild(section);
+    });
+  }
+
+  function buildRow(q){
+    const row = document.createElement("div");
+    row.className = "q-row" + (solved[q.id] ? " solved" : "");
+    row.dataset.id = q.id;
+
+    const hasNote = notes[q.id] && notes[q.id].trim().length > 0;
+
+    row.innerHTML = `
+      <div class="checkbox ${solved[q.id]?"checked":""}" data-role="checkbox">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="q-main">
+        <a href="${q.link}" target="_blank" rel="noopener noreferrer">
+          ${q.num ? `<span class="q-num">#${q.num}</span>`:""}${escapeHTML(q.name)}
+        </a>
+        <div class="q-desc">${escapeHTML(q.desc)}</div>
+        <div class="q-pattern">${escapeHTML(q.pattern)}</div>
+      </div>
+      <div class="q-diff">${diffPillHTML(q.diff)}</div>
+      <div class="q-platform">${escapeHTML(q.platform)}</div>
+      <button class="q-notes-btn ${hasNote?"has-note":""}" data-role="notesToggle">${hasNote?"📝 Notes":"+ Notes"}</button>
+      <div class="q-notes-area">
+        <textarea placeholder="Your notes, approach, gotchas…">${notes[q.id] ? escapeHTML(notes[q.id]) : ""}</textarea>
+      </div>
+    `;
+
+    row.querySelector('[data-role="checkbox"]').addEventListener("click", (e)=>{
+      e.stopPropagation();
+      solved[q.id] = !solved[q.id];
+      saveJSON(STORAGE_KEY, solved);
+      row.classList.toggle("solved", !!solved[q.id]);
+      row.querySelector('[data-role="checkbox"]').classList.toggle("checked", !!solved[q.id]);
+      updateDashboard();
+      updateTopicMini(q.topic);
+    });
+
+    const notesBtn = row.querySelector('[data-role="notesToggle"]');
+    const notesArea = row.querySelector(".q-notes-area");
+    notesBtn.addEventListener("click", ()=>{
+      notesArea.classList.toggle("open");
+    });
+    const textarea = row.querySelector("textarea");
+    textarea.addEventListener("input", ()=>{
+      notes[q.id] = textarea.value;
+      saveJSON(NOTES_KEY, notes);
+      notesBtn.classList.toggle("has-note", textarea.value.trim().length>0);
+      notesBtn.textContent = textarea.value.trim().length>0 ? "📝 Notes" : "+ Notes";
+    });
+
+    return row;
+  }
+
+  function updateTopicMini(topic){
+    const section = document.querySelector(`.topic-section[data-topic="${CSS.escape(topic)}"]`);
+    if(!section) return;
+    const allTopicQs = QUESTIONS.filter(q=>q.topic===topic);
+    const solvedCount = allTopicQs.filter(q=>solved[q.id]).length;
+    const pct = Math.round((solvedCount/allTopicQs.length)*100);
+    section.querySelector(".topic-bar-fill").style.width = pct+"%";
+    section.querySelector(".topic-progress-text").textContent = `${solvedCount}/${allTopicQs.length}`;
+  }
+
+  function escapeHTML(str){
+    if(!str) return "";
+    return str.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  }
+
+  function updateDashboard(){
+    const total = QUESTIONS.length;
+    const easyCount = QUESTIONS.filter(q=>q.diff==="Easy").length;
+    const mediumCount = QUESTIONS.filter(q=>q.diff==="Medium").length;
+    const hardCount = QUESTIONS.filter(q=>q.diff==="Hard").length;
+    const solvedCount = QUESTIONS.filter(q=>solved[q.id]).length;
+    const remaining = total - solvedCount;
+    const pct = total ? Math.round((solvedCount/total)*100) : 0;
+
+    document.getElementById("statTotal").textContent = total;
+    document.getElementById("statEasy").textContent = easyCount;
+    document.getElementById("statMedium").textContent = mediumCount;
+    document.getElementById("statHard").textContent = hardCount;
+    document.getElementById("statSolved").textContent = solvedCount;
+    document.getElementById("statRemaining").textContent = remaining;
+
+    document.getElementById("mainBar").style.width = pct + "%";
+    document.getElementById("progressMetaLeft").textContent = `${solvedCount} / ${total} solved`;
+    document.getElementById("progressMetaRight").textContent = pct + "%";
+
+    const ring = document.getElementById("ringProgress");
+    const circumference = 2 * Math.PI * 60;
+    const offset = circumference - (pct/100)*circumference;
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = offset;
+    document.getElementById("ringPct").textContent = pct + "%";
+
+    renderFooterStats();
+    renderReadiness();
+  }
+
+  function renderFooterStats(){
+    const grid = document.getElementById("topicStatsGrid");
+    grid.innerHTML = "";
+    TOPIC_ORDER.forEach(topic=>{
+      const qs = QUESTIONS.filter(q=>q.topic===topic);
+      if(!qs.length) return;
+      const solvedCount = qs.filter(q=>solved[q.id]).length;
+      const pct = Math.round((solvedCount/qs.length)*100);
+      const card = document.createElement("div");
+      card.className = "topic-stat-card";
+      card.innerHTML = `
+        <div class="topic-stat-name">${topic}</div>
+        <div class="topic-stat-bar"><div class="topic-stat-fill" style="width:${pct}%"></div></div>
+        <div class="topic-stat-text">${solvedCount}/${qs.length} · ${pct}%</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function renderReadiness(){
+    // Weighted score: foundational topics 40%, shortest-path family 30%, MST/DSU 15%, advanced connectivity 15%
+    const foundational = ["Graph Representation","BFS","DFS","Connected Components","Cycle Detection","Bipartite","Topological Sort","DAG"];
+    const shortestPath = ["Shortest Path (BFS)","Multi-Source BFS","0-1 BFS","Dijkstra","Bellman-Ford","Floyd-Warshall","Johnson","A*"];
+    const mstDsu = ["DSU","MST","Prim","Kruskal"];
+    const advanced = ["Bridges","Articulation Points","Biconnected Components","Kosaraju","Tarjan"];
+
+    function groupPct(topics){
+      const qs = QUESTIONS.filter(q=>topics.includes(q.topic));
+      if(!qs.length) return 0;
+      const s = qs.filter(q=>solved[q.id]).length;
+      return s/qs.length;
+    }
+
+    const score = (
+      groupPct(foundational)*0.40 +
+      groupPct(shortestPath)*0.30 +
+      groupPct(mstDsu)*0.15 +
+      groupPct(advanced)*0.15
+    ) * 100;
+
+    document.getElementById("readinessScore").textContent = Math.round(score) + "%";
+  }
+
+  const QUOTES = [
+    ["The best way to predict the future is to implement it, one edge at a time.", "Keep grinding, engineer"],
+    ["Every visited node is a step closer to the offer.", "Stay consistent"],
+    ["Graphs don't forget your effort — neither should your Notes section.", "Track everything"],
+    ["BFS finds the shortest path. Consistency finds the shortest path to mastery.", "One problem a day"],
+    ["Union today, find tomorrow.", "Build the habit"],
+    ["Strongly connected components, weakly connected excuses.", "No shortcuts"],
+    ["The DAG doesn't lie — neither does your progress bar.", "Trust the process"],
+  ];
+
+  function setRandomQuote(){
+    const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+    document.getElementById("quoteText").textContent = `"${q[0]}"`;
+    document.getElementById("quoteAuthor") && (document.getElementById("quoteAuthor").textContent = q[1]);
+    const authorEl = document.querySelector(".quote-author");
+    if(authorEl) authorEl.textContent = q[1];
+  }
+
+  function wireControls(){
+    document.getElementById("searchInput").addEventListener("input", (e)=>{
+      filters.search = e.target.value;
+      renderContent();
+    });
+    document.getElementById("topicFilter").addEventListener("change", (e)=>{
+      filters.topic = e.target.value;
+      renderContent();
+    });
+    document.getElementById("diffFilter").addEventListener("change", (e)=>{
+      filters.diff = e.target.value;
+      renderContent();
+    });
+    document.getElementById("platformFilter").addEventListener("change", (e)=>{
+      filters.platform = e.target.value;
+      renderContent();
+    });
+    document.querySelectorAll(".chip-toggle button").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".chip-toggle button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        filters.status = btn.dataset.status;
+        renderContent();
+      });
+    });
+
+    document.getElementById("expandAllBtn").addEventListener("click", ()=>{
+      TOPIC_ORDER.forEach(t=> collapsed[t]=false);
+      saveJSON(COLLAPSE_KEY, collapsed);
+      document.querySelectorAll(".topic-section").forEach(s=>s.classList.remove("collapsed"));
+    });
+    document.getElementById("collapseAllBtn").addEventListener("click", ()=>{
+      TOPIC_ORDER.forEach(t=> collapsed[t]=true);
+      saveJSON(COLLAPSE_KEY, collapsed);
+      document.querySelectorAll(".topic-section").forEach(s=>s.classList.add("collapsed"));
+    });
+    document.getElementById("resetBtn").addEventListener("click", ()=>{
+      if(confirm("Reset all solved progress and notes? This cannot be undone.")){
+        solved = {}; notes = {};
+        saveJSON(STORAGE_KEY, solved);
+        saveJSON(NOTES_KEY, notes);
+        renderContent();
+        updateDashboard();
+      }
+    });
+  }
+
+  function init(){
+    populateFilterOptions();
+    wireControls();
+    renderContent();
+    updateDashboard();
+    setRandomQuote();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+
+</script>
+</body>
+</html>
